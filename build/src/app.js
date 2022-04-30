@@ -9,6 +9,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const users_routes_1 = __importDefault(require("./routes/users.routes"));
 const feed_routes_1 = __importDefault(require("./routes/feed.routes"));
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 // Inicialization
 const app = (0, express_1.default)();
 // Settings
@@ -21,6 +22,7 @@ app.use((0, cors_1.default)());
 // Routes
 app.use(users_routes_1.default);
 app.use(feed_routes_1.default);
+app.use(auth_routes_1.default);
 // Static files
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 exports.default = app;

@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import usersRoutes from './routes/users.routes'
 import feedRoutes from './routes/feed.routes'
+import authRoutes from './routes/auth.routes'
 
 // Inicialization
 const app = express()
@@ -17,6 +18,7 @@ app.use(cors())
 // Routes
 app.use(usersRoutes)
 app.use(feedRoutes)
+app.use(authRoutes)
 // Static files
 app.use(express.static(path.join(__dirname, 'public')))
 

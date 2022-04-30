@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const URI = `mongodb+srv://${process.env.MONGO_DATABASE}:${process.env.MONGO_PASSWORD}@cluster0.p7kqs.mongodb.net/test?retryWrites=true`;
-        yield mongoose_1.default.connect(URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
+exports.TokenValidator = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const TokenValidator = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.header('auth-token');
+    if (!token)
+        return res.status(401).json({
+            auth: false,
+            message: 'Access denied'
         });
-    }
-    catch (error) {
-        console.log(error);
-    }
-}))();
+    const payload = jsonwebtoken_1.default.verify(token, process.env.TOKEN_KEY_JWT || 'tokentest');
+    return payload && next();
+});
+exports.TokenValidator = TokenValidator;
