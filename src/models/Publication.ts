@@ -5,10 +5,11 @@ export interface PublicationI extends Document {
     image: string;
     video: string;
     url: string;
+    user: [string];
 }
 
 const publicationSchema = new Schema({
-    description: {
+    content: {
         type: String, required: true, trim: true
     },
     image: {
@@ -19,7 +20,11 @@ const publicationSchema = new Schema({
     },
     url: {
         type: String, required: false, trim: true
-    }
+    },
+    user: [{
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    }],
 }, {
     timestamps: true,
     versionKey: false

@@ -5,11 +5,19 @@ export interface UserI extends Document {
   username: string;
   email: string;
   password: string;
+  publications: string;
   encryptPassword(password: string): Promise<string>;
   validatePassword(password: string): Promise<boolean>;
 }
 
 const userSchema = new Schema({
+  publications: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Publication",
+    },
+    { timestamps: true, versionKey: false },
+  ],
   username: {
     type: String,
     min: 3,
@@ -33,14 +41,14 @@ const userSchema = new Schema({
     type: String
   }],
   profile_picture: String,
-  publications: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Publication",
-    },
-    { timestamps: true, versionKey: false },
-  ],
 }, { timestamps: true, versionKey: false });
+
+userSchema.methods.toJSON = function(){
+  let user = this;
+  let userObject = user.toObject();
+  delete userObject.password;
+  return userObject;
+}
 
 userSchema.methods.encryptPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10)

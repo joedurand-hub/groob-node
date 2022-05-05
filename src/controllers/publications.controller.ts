@@ -3,17 +3,25 @@ import Publication, { PublicationI } from '../models/Publication'
 import User from "../models/User";
 
 export const createPost: RequestHandler = async (req: Request, res: Response) => {
-    // Crear un post comun
-    // En otra funcion poder crear otros tipos de post
-    // Y que retornen al front varios o algunos al azar y/o
-    // que posean ciertas características del usuario
-    const { description, image, url } = req.body
-    const publication: PublicationI = new Publication({ description, image, url })
-    console.log(publication)
+    try {
+        const { content } = req.body
 
-    const publicationSaved = await publication.save()
-    console.log('nuevo usuario:', publicationSaved)
-    res.status(201).json(publicationSaved)
+        const user = await User.findById(req.userId)
+        if (!user) return res.status(404).json("No user found")
+        const publication: PublicationI = new Publication({ content, user: user?._id })
+
+        const publicationSaved = await publication.save()
+        const postIdForTheUser = publicationSaved?._id
+        if (user != undefined) {
+            user.publications = user.publications.concat(postIdForTheUser)
+        }
+        await user.save()
+        res.status(201).json(publicationSaved)
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).send("Mandaste cualquier cosa amigo")
+    }
 }
 
 
@@ -31,12 +39,40 @@ export const getAllPostsAndUsers: RequestHandler = async (_req: Request, res: Re
     }
 }
 
-export const getPost: RequestHandler = async (_req: Request, res: Response) => {
-    res.json('Obteniendo 1 Post')
+export const getPostById: RequestHandler = async (req: Request, res: Response) => {
+    const { id } = req.params
+    console.log(id)
+    try {
+        const post = await Publication.findById({ _id: id })
+        console.log("post:", post)
+        res.send(post)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An internal server error occurred');
+    }
 }
 
-export const deletePost: RequestHandler = async (_req: Request, res: Response) => {
-    res.json('Eliminando Post')
+export const searchPost: RequestHandler = async (_req: Request, _res: Response) => {
+    try {
+        let allPublications = await Publication.find()
+        console.log("todos los post", allPublications)
+        // const result = allPublications.filter((publication:string) => {
+        //     if (publication?.content && publication?.content.toLowerCase().includes(content.toLowerCase())) {
+        //         return publication
+        //     }
+        // })
+        // console.log(result) 
+        // return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+export const deletePost: RequestHandler = async (_req: Request, _res: Response) => {
+    // const 
+    // const nftDb = await Product.findByIdAndDelete({ _id: id })
+    // res.json('Eliminando Post')
 }
 
 export const updatePost: RequestHandler = async (_req: Request, res: Response) => {
