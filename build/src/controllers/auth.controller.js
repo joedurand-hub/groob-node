@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reset = exports.login = exports.signup = void 0;
+// import mongoose from "mongoose";
 const User_1 = __importDefault(require("../models/User"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -21,24 +22,24 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     user.password = yield user.encryptPassword(user.password);
     const userSaved = yield user.save();
     const token = jsonwebtoken_1.default.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`);
+    // mongoose.connection.close()
     res.header("auth-token", token).json(userSaved);
-    // En vez de retornar los datos del usuario, ya podría redireccionar 
-    // a la página de inicio, la de login, o darle un alerta y que 
-    // verifiquen el email
 });
 exports.signup = signup;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    const userToLogin = yield User_1.default.findOne({ email });
-    if (!userToLogin)
+    const user = yield User_1.default.findOne({ email });
+    if (!user)
         return res.status(400).json('Email or password is wrong');
-    const passwordFromLogin = yield userToLogin.validatePassword(password);
+    const passwordFromLogin = yield user.validatePassword(password);
     if (!passwordFromLogin)
         return res.status(400).json('Email or password is wrong');
-    const token = jsonwebtoken_1.default.sign({ _id: userToLogin._id }, `${process.env.TOKEN_KEY_JWT}`, {
-        expiresIn: 60 * 15
+    const token = jsonwebtoken_1.default.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
+        expiresIn: 604800
     });
-    return res.json(token);
+    // mongoose.connection.close()
+    console.log("token", token);
+    return res.header('auth-token', token).json(user);
 });
 exports.login = login;
 const reset = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {

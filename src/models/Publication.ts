@@ -1,12 +1,4 @@
-import { Schema, model, Document } from 'mongoose'
-
-export interface PublicationI extends Document {
-    description: string;
-    image: string;
-    video: string;
-    url: string;
-    user: [string];
-}
+import { Schema, model } from 'mongoose'
 
 const publicationSchema = new Schema({
     content: {
@@ -30,4 +22,4 @@ const publicationSchema = new Schema({
     versionKey: false
 })
 
-export default model<PublicationI>('Publication', publicationSchema)
+export default model('Publication', publicationSchema)

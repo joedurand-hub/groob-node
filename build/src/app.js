@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-const users_routes_1 = __importDefault(require("./routes/users.routes"));
+const profile_routes_1 = __importDefault(require("./routes/profile.routes"));
 const feed_routes_1 = __importDefault(require("./routes/feed.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 // Inicialization
@@ -19,8 +19,13 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, morgan_1.default)('dev'));
 app.use((0, cors_1.default)());
+// var corsOptions = {
+//     origin: '*', // Aqui debemos reemplazar el * por el dominio de nuestro front
+//     optionsSuccessStatus: 200 // Es necesario para navegadores antiguos o algunos SmartTVs
+// }
+// app.use(cors(corsOptions));
 // Routes
-app.use(users_routes_1.default);
+app.use(profile_routes_1.default);
 app.use(feed_routes_1.default);
 app.use(auth_routes_1.default);
 // Static files

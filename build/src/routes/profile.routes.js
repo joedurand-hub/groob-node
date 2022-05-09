@@ -1,1 +1,10 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const profile_controller_1 = require("../controllers/profile.controller");
+const tokenValidator_1 = require("../libs/tokenValidator");
+const router = (0, express_1.Router)();
+router.get('/profile', tokenValidator_1.TokenValidator, profile_controller_1.getProfile);
+router.put('/profile/:id', tokenValidator_1.TokenValidator, profile_controller_1.updateProfile);
+router.delete('/profile/:id', tokenValidator_1.TokenValidator, profile_controller_1.deleteProfile);
+exports.default = router;

@@ -12,20 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePost = exports.deletePost = exports.getPost = exports.getAllPostsAndUsers = exports.createPost = void 0;
+exports.updatePost = exports.deletePost = exports.searchPost = exports.getPostById = exports.getAllPostsAndUsers = exports.createPost = void 0;
 const Publication_1 = __importDefault(require("../models/Publication"));
 const User_1 = __importDefault(require("../models/User"));
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Crear un post comun
-    // En otra funcion poder crear otros tipos de post
-    // Y que retornen al front varios o algunos al azar y/o
-    // que posean ciertas características del usuario
-    const { description, image, url } = req.body;
-    const publication = new Publication_1.default({ description, image, url });
-    console.log(publication);
-    const publicationSaved = yield publication.save();
-    console.log('nuevo usuario:', publicationSaved);
-    res.status(201).json(publicationSaved);
+    try {
+        const { content } = req.body;
+        const user = yield User_1.default.findById(req.userId);
+        if (!user)
+            return res.status(404).json("No user found");
+        const publication = new Publication_1.default({ content, user: user === null || user === void 0 ? void 0 : user._id });
+        const publicationSaved = yield publication.save();
+        const postIdForTheUser = publicationSaved === null || publicationSaved === void 0 ? void 0 : publicationSaved._id;
+        if (user != undefined) {
+            user.publications = user.publications.concat(postIdForTheUser);
+        }
+        yield user.save();
+        res.status(201).json(publicationSaved);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).send("Mandaste cualquier cosa amigo");
+    }
 });
 exports.createPost = createPost;
 const getAllPostsAndUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,12 +49,41 @@ const getAllPostsAndUsers = (_req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getAllPostsAndUsers = getAllPostsAndUsers;
-const getPost = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json('Obteniendo 1 Post');
+const getPostById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    try {
+        const post = yield Publication_1.default.findById({ _id: id });
+        console.log("post:", post);
+        res.send(post);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send('An internal server error occurred');
+    }
 });
-exports.getPost = getPost;
-const deletePost = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json('Eliminando Post');
+exports.getPostById = getPostById;
+const searchPost = (_req, _res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let allPublications = yield Publication_1.default.find();
+        console.log("todos los post", allPublications);
+        // const result = allPublications.filter((publication:string) => {
+        //     if (publication?.content && publication?.content.toLowerCase().includes(content.toLowerCase())) {
+        //         return publication
+        //     }
+        // })
+        // console.log(result) 
+        // return res.status(200).json(result)
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.searchPost = searchPost;
+const deletePost = (_req, _res) => __awaiter(void 0, void 0, void 0, function* () {
+    // const 
+    // const nftDb = await Product.findByIdAndDelete({ _id: id })
+    // res.json('Eliminando Post')
 });
 exports.deletePost = deletePost;
 const updatePost = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {

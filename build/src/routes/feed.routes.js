@@ -2,7 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const publications_controller_1 = require("../controllers/publications.controller");
+const profile_controller_1 = require("../controllers/profile.controller");
+const tokenValidator_1 = require("../libs/tokenValidator");
 const router = (0, express_1.Router)();
-router.post('/feed', publications_controller_1.createPost);
-router.get('/feed', publications_controller_1.getAllPostsAndUsers);
+router.post('/feed', tokenValidator_1.TokenValidator, publications_controller_1.createPost);
+router.get('/post/:id', tokenValidator_1.TokenValidator, publications_controller_1.getPostById);
+router.get('/explore', tokenValidator_1.TokenValidator, profile_controller_1.getRcommendedUsersByPublicationsOnTheMoment);
 exports.default = router;
