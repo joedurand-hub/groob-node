@@ -13,10 +13,11 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
         user.password = await user.encryptPassword(user.password)
 
         const userSaved = await user.save()
-        const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`)
-        res.header("auth-token", token).json(token);
+        const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
+            expiresIn: 604800
+        })
         closeConnectionInMongoose;
-        return res.redirect('/feed')
+        return res.header("auth-token", token).json(token)
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
@@ -35,14 +36,30 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
         const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 604800
         })
-        res.header('auth-token', token).json(token);
         closeConnectionInMongoose;
-        return res.redirect('/feed')
+        return res.header('auth-token', token).json(token)
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
     }
 }
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const id = req.userId
+    const user = await User.findById(id)
+    const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
+        expiresIn: 1
+    })
+    console.log(token)
+    closeConnectionInMongoose;
+    return res.header('auth-token', token).json('Sesión cerrada');
+  } catch (error) {
+      console.log(error)
+      res.status(400).json(error)
+  }
+}
+
 
 // export const reset_password = async (_req: Request, res: Response) => {
 //     const { email, username } = req.body
