@@ -28,7 +28,10 @@ const userSchema = new Schema({
   last_name: String,
   description: String,
   profile_picture: String,
-  friends: [{
+  followers: [{
+    type: String
+  }],
+  followed: [{
     type: String
   }],
   publications: [

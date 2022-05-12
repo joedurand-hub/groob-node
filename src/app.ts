@@ -2,9 +2,10 @@ import express from "express"
 import path from 'path'
 import morgan from 'morgan'
 import cors from 'cors'
-import profileRoutes from './routes/profile.routes'
-import feedRoutes from './routes/feed.routes'
 import authRoutes from './routes/auth.routes'
+import feedRoutes from './routes/feed.routes'
+import profileRoutes from './routes/profile.routes'
+import searchRoutes from './routes/search.routes'
 
 // Inicialization
 const app = express()
@@ -21,9 +22,10 @@ app.use(cors())
 // }
 // app.use(cors(corsOptions));
 // Routes
+app.use(authRoutes)
 app.use(profileRoutes)
 app.use(feedRoutes)
-app.use(authRoutes)
+app.use(searchRoutes)
 // Static files
 app.use(express.static(path.join(__dirname, 'public')))
 

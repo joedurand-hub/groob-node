@@ -9,8 +9,8 @@ const closeConnectionInMongoose = mongoose.connection.close();
 export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res: Response) => {
     try {
         const { username, password, email } = req.body
-        const user = new User({ username, password, email })
-        user.password = await user.encryptPassword(user.password)
+            const user = new User({ username, password, email })
+            user.password = await user.encryptPassword(user.password)
 
         const userSaved = await user.save()
         const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {

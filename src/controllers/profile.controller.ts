@@ -18,7 +18,7 @@ export const get_profile = async (
         res.status(200).json(profileData)
         return closeConnectionInMongoose
     } catch (error) {
-        console.log("No se pudo traer el perfil", error)
+        console.log("Cannot get profile", error)
         return res.status(404).json(error)
     }
 }
@@ -47,7 +47,7 @@ export const delete_profile = async (
     try {
         const { id } = req.params
         await User.deleteOne({ _id: id })
-        res.status(200).json(`Usuario eliminado`)
+        res.status(200).json(`User deleted`)
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)
