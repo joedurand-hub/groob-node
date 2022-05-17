@@ -11,7 +11,7 @@ export const search_user: RequestHandler = async (req: Request, res: Response) =
           }
         let data = await User.find()
         const result = data.filter(user => {
-            if(user.username === username) {
+            if(user.username.includes(username)) {
                 return user
             }
         })

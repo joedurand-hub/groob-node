@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.routes'
 import feedRoutes from './routes/feed.routes'
 import profileRoutes from './routes/profile.routes'
 import searchRoutes from './routes/search.routes'
+import followRoutes from './routes/follow.routes'
 
 // Inicialization
 const app = express()
@@ -26,6 +27,7 @@ app.use(authRoutes)
 app.use(profileRoutes)
 app.use(feedRoutes)
 app.use(searchRoutes)
+app.use(followRoutes)
 // Static files
 app.use(express.static(path.join(__dirname, 'public')))
 

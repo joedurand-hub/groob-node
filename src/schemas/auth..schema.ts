@@ -3,9 +3,12 @@ import { z } from "zod";
 
 export const SignupSchema = z.object({
     body: z.object({
-        username: z.string().nonempty("Username is required").min(4, "User too short").max(16, "The username must not exceed 16 characters"),
-        email: z.string().nonempty("Password is required").email({ message: "Write a correct email" }),
-        password: z.string().nonempty("Password is required").regex(/^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9 \S]{6,32}$/),
+        username: z.string().nonempty("Username is required")
+        .min(4, "User too short").max(16, "The username must not exceed 16 characters"),
+        email: z.string().nonempty("Password is required")
+        .email({ message: "Write a correct email" }),
+        password: z.string().nonempty("Password is required")
+        .regex(/^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9 \S]{6,32}$/),
     })
 })
 

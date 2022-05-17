@@ -28,16 +28,26 @@ const userSchema = new Schema({
   last_name: String,
   description: String,
   profile_picture: String,
-  followers: [{
-    type: String
-  }],
-  followed: [{
-    type: String
-  }],
   publications: [
     {
       type: Schema.Types.ObjectId,
       ref: "Publication",
+    },
+    { timestamps: true, versionKey: false },
+  ],
+  followers:  [
+    {
+      type: Schema.Types.String,
+      ref: "Follower",
+      unique: true,
+    },
+    { timestamps: true, versionKey: false },
+  ],
+  followings:  [
+    {
+      type: Schema.Types.String,
+      ref: "Following",
+      unique: true,
     },
     { timestamps: true, versionKey: false },
   ],
