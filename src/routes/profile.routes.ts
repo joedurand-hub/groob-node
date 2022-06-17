@@ -6,10 +6,12 @@ import { UpdateProfileSchema, ValidateProfileParamsSchema } from '../schemas/pro
 
 const router = Router()
 
-router.get('/profile/:id', TokenValidator, schemaValidation(ValidateProfileParamsSchema), get_profile)
+router.get('/profile', TokenValidator, get_profile)
 
-router.put('/profile/:id', TokenValidator, schemaValidation(ValidateProfileParamsSchema), schemaValidation(UpdateProfileSchema), update_profile)
+router.put('/profile/:id', TokenValidator, 
+schemaValidation(ValidateProfileParamsSchema), schemaValidation(UpdateProfileSchema), update_profile)
 
-router.delete('/profile/:id', TokenValidator, schemaValidation(ValidateProfileParamsSchema), delete_profile)
+router.delete('/profile/:id', TokenValidator, 
+schemaValidation(ValidateProfileParamsSchema), delete_profile)
 
 export default router;

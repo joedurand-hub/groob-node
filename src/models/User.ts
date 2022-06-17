@@ -39,7 +39,6 @@ const userSchema = new Schema({
     {
       type: Schema.Types.String,
       ref: "Follower",
-      unique: true,
     },
     { timestamps: true, versionKey: false },
   ],
@@ -47,7 +46,6 @@ const userSchema = new Schema({
     {
       type: Schema.Types.String,
       ref: "Following",
-      unique: true,
     },
     { timestamps: true, versionKey: false },
   ],

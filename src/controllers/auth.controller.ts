@@ -29,7 +29,6 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
         const { email, password } = req.body
         const user = await User.findOne({ email })
         if (!user) return res.status(400).json('Email or password is wrong')
-
         const passwordFromLogin = await user.validatePassword(password)
         if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
 
