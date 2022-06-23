@@ -17,11 +17,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 app.use(cors())
-// var corsOptions = {
-//     origin: '*', // Aqui debemos reemplazar el * por el dominio de nuestro front
-//     optionsSuccessStatus: 200 // Es necesario para navegadores antiguos o algunos SmartTVs
-// }
-// app.use(cors(corsOptions));
+var corsOptions = {
+    origin: 'https://groob.vercel.app', // Aqui debemos reemplazar el * por el dominio de nuestro front
+    optionsSuccessStatus: 200 // Es necesario para navegadores antiguos o algunos SmartTVs
+}
+app.use(cors(corsOptions));
 // Routes
 app.use(authRoutes)
 app.use(profileRoutes)
