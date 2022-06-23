@@ -28,12 +28,23 @@ export const create_post = async (req: Request<unknown, unknown, CreatePublicati
     }
 }
 
+export const get_all_posts = async (_req: Request, res: Response) => {
+    try {
+        
+        const posts = await Publication.find()
+        res.status(200).json(posts)
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An internal server error occurred');
+    }
+}
+
+
 export const get_post_by_id = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
     try {
         const { id } = req.params
-        console.log(id)
         const post = await Publication.findById({ _id: id })
-        console.log("post:", post)
         res.status(200).json(post)
         return closeConnectionInMongoose
     } catch (error) {
