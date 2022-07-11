@@ -1,5 +1,6 @@
 import express from "express"
 import path from 'path'
+import cookieParser from "cookie-parser"
 import morgan from 'morgan'
 import cors from 'cors'
 import authRoutes from './routes/auth.routes'
@@ -13,12 +14,13 @@ const app = express()
 // Settings
 app.set('port', process.env.PORT || 8080)
 // Middlewares
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 app.use(cors())
 var corsOptions = {
-    origin: 'https://groob.vercel.app', // Aqui debemos reemplazar el * por el dominio de nuestro front
+    origin:'*', //'https://groob.vercel.app' // Aqui debemos reemplazar el * por el dominio de nuestro front
     optionsSuccessStatus: 200 // Es necesario para navegadores antiguos o algunos SmartTVs
 }
 app.use(cors(corsOptions));

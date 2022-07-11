@@ -28,6 +28,7 @@ const userSchema = new Schema({
   last_name: String,
   description: String,
   profile_picture: String,
+  darkMode: Boolean,
   publications: [
     {
       type: Schema.Types.ObjectId,

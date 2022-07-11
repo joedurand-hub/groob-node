@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "../models/User";
 import jwt from "jsonwebtoken"
+import { serialize } from "cookie";
 import { LoginBodyType, SignupBodyType } from "../schemas/auth..schema";
 
 const closeConnectionInMongoose = mongoose.connection.close();
@@ -14,10 +15,19 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
 
         const userSaved = await user.save()
         const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
-            expiresIn: 604800
+            expiresIn: 1204800
+        })
+        const serialized = serialize("OursiteJWT", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 1204800,
+            path: "/",
         })
         closeConnectionInMongoose;
-        return res.header("auth-token", token).json(token)
+        res.setHeader('Set-Cookie', serialized)
+        res.status(200).json({message: 'Success'})
+        // return res.header("auth-token", token).json(token)
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
@@ -27,6 +37,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
 export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: Response) => {
     try {
         const { email, password } = req.body
+        
         const user = await User.findOne({ email })
         if (!user) return res.status(400).json('Email or password is wrong')
         const passwordFromLogin = await user.validatePassword(password)
@@ -35,8 +46,17 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
         const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 604800
         })
+        const serialized = serialize("OursiteJWT", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 1204800,
+            path: "/",
+        })
         closeConnectionInMongoose;
-        return res.header('auth-token', token).json(token)
+        res.setHeader('Set-Cookie', serialized)
+        res.status(200).json({message: 'Success'})
+        // return res.header('auth-token', token).json(token)
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
