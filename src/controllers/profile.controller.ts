@@ -23,6 +23,34 @@ export const get_profile = async (
     }
 }
 
+export const get_all_profiles = async (_req: Request, res: Response) => {
+    try {
+        
+        const allProfiles = await User.find()
+        res.status(200).json(allProfiles)
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An internal server error occurred');
+    }
+}
+
+export const get_profile_by_id = async (
+    req: Request<ValidateProfileParamsType, unknown, unknown>, 
+    res: Response) => {
+    try {
+        const { id } = req.params
+        const profileData = await User.findById(id, { password: 0 })
+        console.log("profileById:", profileData)
+        res.status(200).json(profileData)
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log("Cannot get profile", error)
+        return res.status(404).json(error)
+    }
+}
+
+
 export const update_profile = async (
     req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>, 
     res: Response) => {
