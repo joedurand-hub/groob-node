@@ -8,11 +8,11 @@ const closeConnectionInMongoose = mongoose.connection.close();
 
 export const create_post = async (req: Request<unknown, unknown, CreatePublicationType>, res: Response) => {
     try {
-        const { content } = req.body
+        const { content, price, image } = req.body
 
         const user = await User.findById(req.userId)
         if (!user) return res.status(404).json("No user found")
-        const publication = new Publication({ content, user: user?._id })
+        const publication = new Publication({ content, price, image, user: user?._id})
 
         const publicationSaved = await publication.save()
         const postIdForTheUser = publicationSaved?._id
@@ -30,7 +30,7 @@ export const create_post = async (req: Request<unknown, unknown, CreatePublicati
 
 export const get_all_posts = async (_req: Request, res: Response) => {
     try {
-        
+        // Traes los post por id en base a sus followings
         const posts = await Publication.find()
         res.status(200).json(posts)
         return closeConnectionInMongoose

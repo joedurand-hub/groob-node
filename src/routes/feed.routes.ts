@@ -6,7 +6,7 @@ import { schemaValidation } from '../libs/schemasValidator';
 import { CreatePublicationSchema, GetOrDeletePublicationByIdSchema } from '../schemas/publications.schema';
 const router = Router()
 
-router.post('/feed', TokenValidator, schemaValidation(CreatePublicationSchema), create_post)
+router.post('/post', TokenValidator, schemaValidation(CreatePublicationSchema), create_post)
 
 router.get('/posts', get_all_posts) // trae absolutamente todos los posts.
 
@@ -14,7 +14,7 @@ router.get('/posts', get_all_posts) // trae absolutamente todos los posts.
 // a partir de estos id puedo buscar a esos usuarios, traer sus publicaciones, ordenarlas de 
 // las mas recientes a las mas antiguas y enviarlas al front.
 
-router.get('/posts/:id', schemaValidation(GetOrDeletePublicationByIdSchema), get_post_by_id)
+router.get('/post/:id', schemaValidation(GetOrDeletePublicationByIdSchema), get_post_by_id)
 
 router.delete('/post/:id', TokenValidator, schemaValidation(GetOrDeletePublicationByIdSchema), delete_post)
 export default router;

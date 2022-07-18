@@ -13,6 +13,9 @@ const publicationSchema = new Schema({
     url: {
         type: String, required: false, trim: true
     },
+    price: {
+        type: Number, required: false, trim: true
+    },
     user: [{
         type: Schema.Types.ObjectId,
         ref: "User",

@@ -7,8 +7,8 @@ import Following from "../models/Following";
 const closeConnectionInMongoose = mongoose.connection.close();
 
 export const follow = async (req: Request, res: Response) => {
-    const { sigo_a } = req.body;
     try {
+        const { sigo_a } = req.body;
         const my_user = await User.findById(req.userId)
         const following = new Following({ following: sigo_a, user: my_user?._id })
 
@@ -54,9 +54,9 @@ export const get_follows = async (req: Request, res: Response) => {
 }
 
 export const unfollow = async (req: Request, res: Response) => {
-    const { id_del_usuario_a_dejar_de_seguir } = req.body;
-    const id = req.userId
     try {
+        const { id_del_usuario_a_dejar_de_seguir } = req.body;
+        const id = req.userId
         const theOtherUser = await User.findById(id_del_usuario_a_dejar_de_seguir)
         const your_follows = theOtherUser.followers
         const followersDetheOther = await Follower.find({ _id: { $eq: your_follows } })

@@ -17,14 +17,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
         const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 1204800
         })
-        // const serialized = serialize("authToken", token, {
-        //     httpOnly: true,
-        //     secure: true,
-        //     sameSite: "none",
-        //     maxAge: 1204800,
-        //     path: "/",
-        // })
-        // closeConnectionInMongoose;
+
         res.cookie('authToken', token)
         res.status(200).json({message: 'Success', token})
     } catch (error) {
@@ -45,13 +38,6 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
         const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 604800
         })
-        // const serialized = serialize("authToken", token, {
-        //     httpOnly: true,
-        //     secure: true,
-        //     sameSite: "none",
-        //     maxAge: 1204800,
-        //     path: "/",
-        // })
         res.cookie('authToken', token)
         res.status(200).json({message: 'Success', token})
         closeConnectionInMongoose;
