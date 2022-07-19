@@ -11,41 +11,22 @@ export const follow = async (req: Request, res: Response) => {
         const { sigo_a } = req.body;
         const my_user = await User.findById(req.userId)
         const following = new Following({ following: sigo_a, user: my_user?._id })
-
         const following_saved = await following.save()
         const add_new_following = following_saved?._id
-
         if (my_user != undefined) {
             my_user.followings = my_user.followings.concat(add_new_following)
         }
         await my_user.save()
-
         const user_with_new_follower = await User.findById(sigo_a)
         const follower = new Follower({ follower: req.userId, user: sigo_a })
-
         const follower_saved = await follower.save()
         const add_new_follower = follower_saved?._id
-
         if (user_with_new_follower != undefined) {
             user_with_new_follower.followers = user_with_new_follower.followers.concat(add_new_follower)
         }
         await user_with_new_follower.save()
         closeConnectionInMongoose
         res.json(true)
-
-    } catch (error) {
-        console.log(error)
-        res.status(400).json(error)
-    }
-}
-
-export const get_follows = async (req: Request, res: Response) => {
-    try {
-        const my_user = await User.findById(req.userId)
-        const followings = my_user.followings
-        console.log("followings:", followings)
-        closeConnectionInMongoose
-        res.json({ done: true, followings })
 
     } catch (error) {
         console.log(error)
@@ -77,6 +58,32 @@ export const unfollow = async (req: Request, res: Response) => {
         res.json({ done: true })
     }
     catch (error) {
+        console.log(error)
+        res.status(400).json(error)
+    }
+}
+
+export const get_followers = async (req: Request, res: Response) => {
+    try {
+        const my_user = await User.findById(req.userId)
+        const followers = my_user.followers
+        console.log("followers:", followers)
+        closeConnectionInMongoose
+        res.json({ done: true, followers })
+    } catch (error) {
+        console.log(error)
+        res.status(400).json(error)
+    }
+}
+
+export const get_followings = async (req: Request, res: Response) => {
+    try {
+        const my_user = await User.findById(req.userId)
+        const followings = my_user.followings
+        console.log("followings:", followings)
+        closeConnectionInMongoose
+        res.json({ done: true, followings })
+    } catch (error) {
         console.log(error)
         res.status(400).json(error)
     }
