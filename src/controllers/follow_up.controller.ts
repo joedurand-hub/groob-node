@@ -29,16 +29,16 @@ export const follow = async (req: Request, res: Response) => {
 export const unfollow = async (req: Request, res: Response) => {
     try {
         const { id_del_usuario_a_dejar_de_seguir } = req.body;
-        const el_otro_usuario = await User.findById(id_del_usuario_a_dejar_de_seguir)
-        if (el_otro_usuario !== undefined) {
-            el_otro_usuario.followers = el_otro_usuario.followings.filter((id) => id !== my_user?._id)
-        }
-        await el_otro_usuario.save()
         const my_user = await User.findById(req.userId)
         if (my_user !== undefined) {
             my_user.followings = my_user.followings.filter((id) => id !== id_del_usuario_a_dejar_de_seguir)
         }
         await my_user.save()
+        const el_otro_usuario = await User.findById(id_del_usuario_a_dejar_de_seguir)
+        if (el_otro_usuario !== undefined) {
+            el_otro_usuario.followers = el_otro_usuario.followings.filter((id) => id !== my_user?._id)
+        }
+        await el_otro_usuario.save()
         closeConnectionInMongoose
         res.json({ done: true })
     }
