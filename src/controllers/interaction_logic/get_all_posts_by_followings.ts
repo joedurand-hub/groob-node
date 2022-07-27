@@ -6,15 +6,15 @@ const closeConnectionInMongoose = mongoose.connection.close();
 
 // export const get_all_posts_by_followings = async (req: Request, res: Response) => {
 //     try {
-//         const my_user = await User.findById(req.userId)
-//         // const followings = my_user.followings
+//         const myUser = await User.findById(req.userId)
+//         // const followings = myUser.followings
 //         // const postsByFollowings = followings.map((userID) => {
 //         //     const users_que_sigo = User.findById(userID)
 //         //     return users_que_sigo
 //         // })
 
 //         // console.log("postsByFollowings:", postsByFollowings)
-//         res.json({ done: true, my_user  })
+//         res.json({ done: true, myUser  })
 //         return closeConnectionInMongoose;
 
 //     } catch (error) {
@@ -24,7 +24,7 @@ const closeConnectionInMongoose = mongoose.connection.close();
 // }
 
 
-export const get_all_posts_by_followings = async (req: Request, res: Response) => {
+export const getAllPostsByFollowings = async (req: Request, res: Response) => {
     try {
         const profileData = await User.findById(req.userId, { password: 0 }).populate({
             path: 'publications',

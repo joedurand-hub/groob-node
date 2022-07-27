@@ -3,15 +3,15 @@ import { RequestHandler, Request, Response } from "express";
 import User from '../../models/User'
 
 
-export const search_user: RequestHandler = async (req: Request, res: Response) => {
+export const searchUser: RequestHandler = async (req: Request, res: Response) => {
     try {
-        const { username } = req.query
-        if (username === undefined || username === null) {
+        const { userName } = req.query
+        if (userName === undefined || userName === null) {
             return console.log("No hay data maestro");
-          }
+        }
         let data = await User.find()
         const result = data.filter(user => {
-            if(user.username.includes(username)) {
+            if(user.userName.includes(userName)) {
                 return user
             }
         })
