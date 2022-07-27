@@ -9,8 +9,8 @@ const closeConnectionInMongoose = mongoose.connection.close();
 
 export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res: Response) => {
     try {
-        const { username, password, email } = req.body
-            const user = new User({ username, password, email })
+        const { userName, password, email } = req.body
+            const user = new User({ userName, password, email })
             user.password = await user.encryptPassword(user.password)
 
         const userSaved = await user.save()
@@ -65,11 +65,11 @@ export const logout = async (req: Request, res: Response) => {
 
 
 // export const reset_password = async (_req: Request, res: Response) => {
-//     const { email, username } = req.body
+//     const { email, userName } = req.body
 //     return {
 //         from: 'henry.nftmarket@gmail.com',
 //         to: email,
 //         subject: `Password Reset Request`,
-//         text: `Hello, ${username}. We've received a password reset request from this email address. Below we'll provide you a special link that will help you change your password. Please note that for security reasons this link will expire after 24 hours. http://localhost:3000/reset/${req.userId}`,
+//         text: `Hello, ${userName}. We've received a password reset request from this email address. Below we'll provide you a special link that will help you change your password. Please note that for security reasons this link will expire after 24 hours. http://localhost:3000/reset/${req.userId}`,
 //     }
 // }
