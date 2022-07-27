@@ -20,7 +20,7 @@ export const create_post = async (req: Request<unknown, unknown, CreatePublicati
             user.publications = user.publications.concat(postIdForTheUser)
         }
         await user.save()
-        res.status(201).json(publicationSaved)
+        res.status(201).json("Publicación exitosa!")
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)

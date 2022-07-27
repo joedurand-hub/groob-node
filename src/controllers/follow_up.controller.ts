@@ -65,7 +65,6 @@ export const get_followings = async (req: Request, res: Response) => {
     try {
         const my_user = await User.findById(req.userId)
         const followings = my_user.followings
-        console.log("followings:", followings)
         closeConnectionInMongoose
         res.json({ done: true, followings })
     } catch (error) {
