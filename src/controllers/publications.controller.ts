@@ -6,7 +6,7 @@ import { CreatePublicationType, GetOrDeletePublicationByIdType } from '../schema
 
 const closeConnectionInMongoose = mongoose.connection.close();
 
-export const create_post = async (req: Request<unknown, unknown, CreatePublicationType>, res: Response) => {
+export const createPost = async (req: Request<unknown, unknown, CreatePublicationType>, res: Response) => {
     try {
         const { content, price, image } = req.body
 
@@ -24,11 +24,11 @@ export const create_post = async (req: Request<unknown, unknown, CreatePublicati
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)
-        res.status(400).send("Mandaste cualquier cosa amigo")
+        res.status(400).send("Mandaste cualquier cosa")
     }
 }
 
-export const get_all_posts = async (_req: Request, res: Response) => {
+export const getAllPosts = async (_req: Request, res: Response) => {
     try {
         // Traes los post por id en base a sus followings
         const posts = await Publication.find()
@@ -41,7 +41,7 @@ export const get_all_posts = async (_req: Request, res: Response) => {
 }
 
 
-export const get_post_by_id = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
+export const getPostById = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
     try {
         const { id } = req.params
         const post = await Publication.findById({ _id: id })
@@ -54,7 +54,7 @@ export const get_post_by_id = async (req: Request<GetOrDeletePublicationByIdType
 }
 
 
-export const delete_post = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
+export const deletePost = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
     try {
         const { id } = req.params
         const postToRemove = await Publication.findById(id)

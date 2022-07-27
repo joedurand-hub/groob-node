@@ -5,7 +5,7 @@ import { UpdateProfileBodyType, ValidateProfileParamsType } from "../schemas/pro
 
 const closeConnectionInMongoose = mongoose.connection.close();
 
-export const get_profile = async (
+export const getProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>, 
     res: Response) => {
     try {
@@ -23,7 +23,7 @@ export const get_profile = async (
     }
 }
 
-export const get_all_profiles = async (_req: Request, res: Response) => {
+export const getAllProfiles = async (_req: Request, res: Response) => {
     try {
         
         const allProfiles = await User.find()
@@ -35,7 +35,7 @@ export const get_all_profiles = async (_req: Request, res: Response) => {
     }
 }
 
-export const get_profile_by_id = async (
+export const getProfileById = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>, 
     res: Response) => {
     try {
@@ -51,16 +51,16 @@ export const get_profile_by_id = async (
 }
 
 
-export const update_profile = async (
+export const updateProfile = async (
     req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>, 
     res: Response) => {
     try {
-        const { userName, description, profile_picture } = req.body;
+        const { userName, description, profilePicture } = req.body;
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
         const userUpdated = await User.findOneAndUpdate(
             {_id: user._id}, 
-            { userName, description, profile_picture })
+            { userName, description, profilePicture })
         res.status(200).json(userUpdated);
         return closeConnectionInMongoose
     } catch (error) {
@@ -69,7 +69,7 @@ export const update_profile = async (
     }
 }
 
-export const delete_profile = async (
+export const deleteProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>, 
     res: Response) => {
     try {
