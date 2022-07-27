@@ -8,7 +8,7 @@ router.post('/follow', TokenValidator, follow)
 
 router.post('/unfollow', TokenValidator, unfollow)
 
-router.get('/followers', getFollowers)
+router.get('/followers', TokenValidator, getFollowers)
 
 router.get('/followings', TokenValidator, getFollowings)
 
