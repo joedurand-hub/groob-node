@@ -24,10 +24,10 @@ const userSchema = new Schema({
     type: Number,
     min: 13,
   },
-  first_name: String,
-  last_name: String,
+  firstName: String,
+  lastName: String,
   description: String,
-  profile_picture: String,
+  profilePicture: String,
   darkMode: Boolean,
   publications: [
     {
