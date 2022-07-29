@@ -14,7 +14,6 @@ export const getProfile = async (
             select: 'publications',
             options: { limit: 10 }
         })
-        console.log("profile:", profileData)
         res.status(200).json(profileData)
         return closeConnectionInMongoose
     } catch (error) {
@@ -40,8 +39,9 @@ export const getProfileById = async (
     res: Response) => {
     try {
         const { id } = req.params
+        console.log("el aidi:", id)
         const profileData = await User.findById(id, { password: 0 })
-        console.log("profileById:", profileData)
+        console.log(profileData)
         res.status(200).json(profileData)
         return closeConnectionInMongoose
     } catch (error) {

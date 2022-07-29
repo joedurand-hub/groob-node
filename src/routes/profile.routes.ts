@@ -8,7 +8,7 @@ const router = Router()
 
 router.get('/profile', TokenValidator, getProfile)
 
-router.get('/profile/:id', schemaValidation(ValidateProfileParamsSchema), getProfileById)
+router.get('/profileById/:id', schemaValidation(ValidateProfileParamsSchema), TokenValidator, getProfileById)
 
 router.get('/profiles', getAllProfiles)
 

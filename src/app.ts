@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 var corsOptions = {
-    origin:'http://localhost:3000', //'https://groob.vercel.app' // Aqui debemos reemplazar el * por el dominio de nuestro front
+    origin:'https://groob.vercel.app', // Aqui debemos reemplazar el * por el dominio de nuestro front
     optionsSuccessStatus: 200,
     credentials: true, // Es necesario para navegadores antiguos o algunos SmartTVs
 }
