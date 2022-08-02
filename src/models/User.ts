@@ -21,32 +21,19 @@ const userSchema = new Schema({
     minlength: 6
   },
   age: {
-    type: Number,
-    min: 13,
+    type: Date,
   },
   firstName: String,
   lastName: String,
   description: String,
   profilePicture: String,
   darkMode: Boolean,
+  premium: Boolean,
+  explicitContent: Boolean,
   publications: [
     {
       type: Schema.Types.ObjectId,
       ref: "Publication",
-    },
-    { timestamps: true, versionKey: false },
-  ],
-  followers:  [
-    {
-      type: Schema.Types.String,
-      ref: "Follower",
-    },
-    { timestamps: true, versionKey: false },
-  ],
-  followings:  [
-    {
-      type: Schema.Types.String,
-      ref: "Following",
     },
     { timestamps: true, versionKey: false },
   ],
