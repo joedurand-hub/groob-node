@@ -16,10 +16,10 @@ const publicationSchema = new Schema({
     price: {
         type: Number, required: false, trim: true
     },
-    user: [{
+    user: {
         type: Schema.Types.ObjectId,
         ref: "User",
-    }],
+    },
 }, {
     timestamps: true,
     versionKey: false
