@@ -4,7 +4,7 @@ export const CreatePublicationSchema = z.object({
     body: z.object({
         content: z.string().nonempty().max(500).optional(),
         image: z.string().optional(),
-        price: z.number().optional()
+        price: z.number().nonnegative().optional()
     }),
     // params: z.object({
     //     id: z.string().min(17)

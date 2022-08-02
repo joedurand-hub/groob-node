@@ -7,12 +7,6 @@ const publicationSchema = new Schema({
     image: {
         type: String, required: false, trim: true
     },
-    video: {
-        type: String, required: false, trim: true
-    },
-    url: {
-        type: String, required: false, trim: true
-    },
     price: {
         type: Number, required: false, trim: true
     },
