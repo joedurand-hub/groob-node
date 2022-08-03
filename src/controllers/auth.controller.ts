@@ -19,7 +19,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
         })
 
         res.cookie('authToken', token)
-        res.status(200).json({message: 'Success', token})
+        res.status(200).json({message: 'Success'})
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
@@ -39,7 +39,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             expiresIn: 604800
         })
         res.cookie('authToken', token)
-        res.status(200).json({message: 'Success', token})
+        res.status(200).json({message: 'Success'})
         closeConnectionInMongoose;
     } catch (error) {
         console.log("error:", error)
@@ -47,16 +47,10 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
     }
 }
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (_req: Request, res: Response) => {
   try {
-    const id = req.userId
-    const user = await User.findById(id)
-    const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
-        expiresIn: 1
-    })
-    console.log(token)
-    closeConnectionInMongoose;
-    return res.header('auth-token', token).json('Sesión cerrada');
+    res.clearCookie('authToken');
+    res.send('Cookie deleted');
   } catch (error) {
       console.log(error)
       res.status(400).json(error)

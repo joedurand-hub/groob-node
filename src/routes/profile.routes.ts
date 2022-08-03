@@ -1,21 +1,24 @@
 import { Router } from 'express'
-import { get_profile, delete_profile, update_profile, get_profile_by_id, get_all_profiles } from '../controllers/profile.controller';
+import { getProfile, deleteProfile, updateProfile, getProfileById, getAllProfiles, getAllPostsByUser } from '../controllers/profile.controller';
 import { TokenValidator } from '../libs/tokenValidator';
 import { schemaValidation } from '../libs/schemasValidator';
 import { UpdateProfileSchema, ValidateProfileParamsSchema } from '../schemas/profile.schema';
 
 const router = Router()
 
-router.get('/profile', TokenValidator, get_profile)
+router.get('/profile', TokenValidator, getProfile)
 
-router.get('/profile/:id', schemaValidation(ValidateProfileParamsSchema), get_profile_by_id)
-// getProfileById debería recibir la solicitud por query parece
-router.get('/profiles', get_all_profiles)
+router.get('/profileById/:id', schemaValidation(ValidateProfileParamsSchema), TokenValidator, getProfileById)
+
+router.get('/profiles', getAllProfiles)
 
 router.put('/profile/:id', TokenValidator, 
-schemaValidation(ValidateProfileParamsSchema), schemaValidation(UpdateProfileSchema), update_profile)
+schemaValidation(ValidateProfileParamsSchema), schemaValidation(UpdateProfileSchema), updateProfile)
 
 router.delete('/profile/:id', TokenValidator, 
-schemaValidation(ValidateProfileParamsSchema), delete_profile)
+schemaValidation(ValidateProfileParamsSchema), deleteProfile)
+
+router.get('/profile/posts', TokenValidator, getAllPostsByUser) // trae absolutamente todos los posts del usuario.
+
 
 export default router;
