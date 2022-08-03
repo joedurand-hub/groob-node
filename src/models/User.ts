@@ -21,7 +21,7 @@ const userSchema = new Schema({
     minlength: 6
   },
   age: {
-    type: Date,
+    type: Number,
   },
   firstName: String,
   lastName: String,
@@ -32,7 +32,7 @@ const userSchema = new Schema({
   explicitContent: Boolean,
   publications: [
     {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.String,
       ref: "Publication",
     },
     { timestamps: true, versionKey: false },

@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import User from '../models/User'
 import Publication from '../models/Publication'
-import mongoose from "mongoose";
+import { closeConnectionInMongoose } from "../libs/constants";
 import { UpdateProfileBodyType, ValidateProfileParamsType } from "../schemas/profile.schema";
 
-const closeConnectionInMongoose = mongoose.connection.close();
 
 export const getProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
