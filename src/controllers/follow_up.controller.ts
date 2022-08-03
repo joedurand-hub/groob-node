@@ -9,7 +9,7 @@ export const follow = async (req: Request, res: Response) => {
         const { sigo_a } = req.body;
         const myUser = await User.findById(req.userId)
         if (myUser != undefined) {
-            myUser.followings = myUser.followings.concat(sigo_a)
+            myUser.followings = myUser.followings?.concat(sigo_a)
         }
         await myUser.save()
         const userWithNewFollower = await User.findById(sigo_a)
@@ -31,7 +31,7 @@ export const unfollow = async (req: Request, res: Response) => {
         const { idOfTheUserToUnfollow } = req.body;
         const otherUser = await User.findById(idOfTheUserToUnfollow)
         if (otherUser !== undefined) {
-            otherUser.followers = otherUser.followings.filter((id) => id !== myUser?._id)
+            otherUser.followers = otherUser.followers.filter((id) => id !== myUser?._id)
         }
         await otherUser.save()
         const myUser = await User.findById(req.userId)
@@ -48,13 +48,20 @@ export const unfollow = async (req: Request, res: Response) => {
     }
 }
 
-export const getFollowers = async (req: Request, res: Response) => {
+export const getFollowers = async (req: Request, res: Response) => { // AL FIN ANDAA
     try {
         const myUser = await User.findById(req.userId)
-        const followers = myUser.followers
-        console.log("followers:", followers)
-        closeConnectionInMongoose
-        res.json({ done: true, followers })
+        if (myUser !== undefined) {
+            let todosMisIds = myUser.followers.map((id) => id)
+            const result = await User.find({
+                _id: {
+                  $in: todosMisIds
+                }
+              })
+              console.log("followers:", result)
+              res.json({ done: true })
+              closeConnectionInMongoose
+            }
     } catch (error) {
         console.log(error)
         res.status(400).json(error)

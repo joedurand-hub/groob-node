@@ -30,9 +30,11 @@ const userSchema = new Schema({
   darkMode: Boolean,
   premium: Boolean,
   explicitContent: Boolean,
+  followers: [String],
+  followings: [String],
   publications: [
     {
-      type: Schema.Types.String,
+      type: Schema.Types.ObjectId,
       ref: "Publication",
     },
     { timestamps: true, versionKey: false },
