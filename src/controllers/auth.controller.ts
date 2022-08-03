@@ -47,18 +47,10 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
     }
 }
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (_req: Request, res: Response) => {
   try {
-    const id = req.userId
-    const user = await User.findById(id)
-    const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
-        expiresIn: 1
-    })
-    // clearCookie('cookie_name');
-    //     res.send('Cookie deleted');
-    console.log(token)
-    closeConnectionInMongoose;
-    return res.header('auth-token', token).json('Sesión cerrada');
+    res.clearCookie('authToken');
+    res.send('Cookie deleted');
   } catch (error) {
       console.log(error)
       res.status(400).json(error)
