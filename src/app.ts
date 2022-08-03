@@ -19,9 +19,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 var corsOptions = {
-    origin:'http://localhost:3000', //'https://groob.vercel.app' // Aqui debemos reemplazar el * por el dominio de nuestro front
+    origin: 'http://localhost:3000', // Aqui debemos reemplazar el * por el dominio de nuestro front
     optionsSuccessStatus: 200,
-    credentials: true, // Es necesario para navegadores antiguos o algunos SmartTVs
+    credentials: true,
 }
 app.use(cors(corsOptions));
 // Routes
@@ -31,6 +31,7 @@ app.use(feedRoutes)
 app.use(searchRoutes)
 app.use(followRoutes)
 // Static files
+app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.static(path.join(__dirname, 'public')))
 
 
