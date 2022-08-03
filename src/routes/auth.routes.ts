@@ -10,7 +10,7 @@ router.post('/signup', schemaValidation(SignupSchema), signup)
 
 router.post('/login', schemaValidation(LoginSchema), login)
 
-router.post('/logout', TokenValidator, logout)
+router.post('/logout', logout)
 
 // router.post('/reset', TokenValidator, reset)
 
