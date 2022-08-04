@@ -1,9 +1,8 @@
-import { RequestHandler, Request, Response } from "express";
-// import Publication, { PublicationI } from '../models/Publication'
+import { Request, Response } from "express";
 import User from '../../models/User'
 
 
-export const searchUser: RequestHandler = async (req: Request, res: Response) => {
+export const searchUser = async (req: Request, res: Response) => {
     try {
         const { userName } = req.query
         if (userName === undefined || userName === null) {

@@ -31,6 +31,7 @@ app.use(feedRoutes)
 app.use(searchRoutes)
 app.use(followRoutes)
 // Static files
+app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.static(path.join(__dirname, 'public')))
 
 
