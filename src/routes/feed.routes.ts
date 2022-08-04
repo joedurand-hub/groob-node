@@ -1,19 +1,20 @@
 import { Router } from 'express'
-import { createPost, getAllPosts, getPostById, deletePost } from '../controllers/publications.controller';
+import { createPost, getPostById, deletePost, commentPost, likePost, dislikePost } from '../controllers/publications.controller';
+import {getAllPostsByFollowings} from '../controllers/interaction/getAllPostsByFollowings.controller'
 import { TokenValidator } from '../libs/tokenValidator';
 import { schemaValidation } from '../libs/schemasValidator';
 import multer from "../libs/multer"
-// import { get_all_posts_by_followings } from '../controllers/interaction_logic/get_all_posts_by_followings';
 import { CreatePublicationSchema, GetOrDeletePublicationByIdSchema } from '../schemas/publications.schema';
 const router = Router()
 
 router.post('/post', TokenValidator, multer.single('image'), schemaValidation(CreatePublicationSchema), createPost)
+router.patch('/like/:id', TokenValidator, likePost)
+router.patch('/dislike/:id', TokenValidator, dislikePost)
+router.post('/post/:id', TokenValidator,  commentPost)
 
-router.get('/posts', getAllPosts) // trae absolutamente todos los posts.
 
-// router.get('feed', TokenValidator, get_all_posts_by_followings) // trae id de a quienes sigo
-// a partir de estos id puedo buscar a esos usuarios, traer sus publicaciones, ordenarlas de 
-// las mas recientes a las mas antiguas y enviarlas al front.
+
+router.get('/posts', TokenValidator, getAllPostsByFollowings) 
 
 router.get('/post/:id', TokenValidator, schemaValidation(GetOrDeletePublicationByIdSchema), getPostById)
 

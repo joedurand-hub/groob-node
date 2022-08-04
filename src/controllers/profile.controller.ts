@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import User from '../models/User'
 import Publication from '../models/Publication'
+import fs from "fs-extra"
+import { uploadImage } from "../libs/cloudinary";
+// import {  deleteImage } from "../libs/cloudinary";
 import { closeConnectionInMongoose } from "../libs/constants";
 import { UpdateProfileBodyType, ValidateProfileParamsType } from "../schemas/profile.schema";
 
@@ -54,12 +57,21 @@ export const updateProfile = async (
     req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>,
     res: Response) => {
     try {
-        const { userName, description, profilePicture } = req.body;
+        const { userName, description, age, firstName, lastName,  } = req.body;
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
+        if(req.file) {
+            const result = await uploadImage({ filePath: req.file.path })
+           user.profilePicture = {
+             public_id: result.public_id,
+             secure_url: result.secure_url, 
+           }
+           await fs.unlink(req.file.path)
+         }
+        await user.save()
         const userUpdated = await User.findOneAndUpdate(
             { _id: user._id },
-            { userName, description, profilePicture })
+            { userName, description, age, firstName, lastName })
         res.status(200).json(userUpdated);
         return closeConnectionInMongoose
     } catch (error) {

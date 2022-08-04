@@ -8,7 +8,6 @@ export const UpdateProfileSchema = z.object({
         description: z.string().max(230, "The description must not exceed 230 characters").optional(),
         firstName: z.string().regex(/^[a-zA-ZÀ-ÿ\s]{2,16}$/).optional(),
         lastName: z.string().regex(/^[a-zA-ZÀ-ÿ\s]{2,16}$/).optional(),
-        profilePicture: z.string().optional(),
         followings: z.string().optional(),
         followers: z.string().optional(),
         age: z.number().nonnegative().min(13).optional(),

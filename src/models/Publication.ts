@@ -12,13 +12,20 @@ const publicationSchema = new Schema({
     price: {
         type: Number, required: false, trim: true
     },
+    likes: {
+        type: Number, default: 0,
+    },
+    comments: {
+        type: [String], default: [],  maxlength: 500,
+    },
+    createdAt: {
+        type: Date,
+        default: new Date()
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-}, {
-    timestamps: true,
-    versionKey: false
 })
 
 export default model('Publication', publicationSchema)

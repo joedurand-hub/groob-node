@@ -6,13 +6,13 @@ const closeConnectionInMongoose = mongoose.connection.close();
 
 export const follow = async (req: Request, res: Response) => {
     try {
-        const { sigo_a } = req.body;
+        const { followTo } = req.body;
         const myUser = await User.findById(req.userId)
         if (myUser != undefined) {
-            myUser.followings = myUser.followings?.concat(sigo_a)
+            myUser.followings = myUser.followings?.concat(followTo)
         }
         await myUser.save()
-        const userWithNewFollower = await User.findById(sigo_a)
+        const userWithNewFollower = await User.findById(followTo)
         if (userWithNewFollower != undefined) {
             userWithNewFollower.followers = userWithNewFollower.followers.concat(myUser?._id)
         }
@@ -52,16 +52,22 @@ export const getFollowers = async (req: Request, res: Response) => { // AL FIN A
     try {
         const myUser = await User.findById(req.userId)
         if (myUser !== undefined) {
-            let todosMisIds = myUser.followers.map((id) => id)
-            const result = await User.find({
+            let allMyIds = myUser.followers.map((id) => id)
+            const result = await User.find({ // retorna un array con los seguidores (objetos con data)
                 _id: {
-                  $in: todosMisIds
+                    $in: allMyIds
                 }
-              })
-              console.log("followers:", result)
-              res.json({ done: true })
-              closeConnectionInMongoose
-            }
+            })
+            const followersData = result.map(obj => {
+                return {
+                    username: obj.userName,
+                    picture: obj.profilePicture,
+                    id: obj._id.toString()
+                }
+            })
+            res.json({ followersData })
+            closeConnectionInMongoose
+        }
     } catch (error) {
         console.log(error)
         res.status(400).json(error)
@@ -71,10 +77,23 @@ export const getFollowers = async (req: Request, res: Response) => { // AL FIN A
 export const getFollowings = async (req: Request, res: Response) => {
     try {
         const myUser = await User.findById(req.userId)
-        const followings = myUser.followings
-        console.log("followings:", followings)
-        closeConnectionInMongoose
-        res.json({ done: true, followings })
+        if (myUser !== undefined) {
+            let allMyIds = myUser.followings.map((id) => id)
+            const result = await User.find({ // retorna un array con los seguidores (objetos con data)
+                _id: {
+                    $in: allMyIds
+                }
+            })
+            const followingsData = result.map(obj => {
+                return {
+                    username: obj.userName,
+                    picture: obj.profilePicture,
+                    id: obj._id.toString()
+                }
+            })
+            res.json({ followingsData })
+            closeConnectionInMongoose
+        }
     } catch (error) {
         console.log(error)
         res.status(400).json(error)

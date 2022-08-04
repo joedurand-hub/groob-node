@@ -20,18 +20,20 @@ const userSchema = new Schema({
     requiered: [true, 'Please enter a password'],
     minlength: 6
   },
-  age: {
-    type: Number,
+  birthday: {
+    type: Date,
+    default: new Date()
   },
-  firstName: String,
-  lastName: String,
-  description: String,
-  profilePicture: String,
-  darkMode: Boolean,
-  premium: Boolean,
-  explicitContent: Boolean,
-  followers: [String],
-  followings: [String],
+  firstName: {type: String, default: " "},
+  lastName: {type: String, default: " "},
+  description: {type: String, default: " "},
+  profilePicture: { public_id: String,
+    secure_url: String
+  },
+  premium: { type: Boolean, default: false},
+  explicitContent: { type: Boolean, default: false},
+  followers: {type: [String], default: [] },
+  followings: {type: [String], default: [] },
   publications: [
     {
       type: Schema.Types.ObjectId,
