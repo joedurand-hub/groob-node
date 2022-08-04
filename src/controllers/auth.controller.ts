@@ -11,7 +11,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
         const { userName, password, email } = req.body
             const user = new User({ userName, password, email })
             user.password = await user.encryptPassword(user.password)
-
+            user.profilePicture.secure_url = "https://res.cloudinary.com/groob/image/upload/v1659601590/istockphoto-1300845620-612x612_bq6yvb.jpg"
         const userSaved = await user.save()
         const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 1204800

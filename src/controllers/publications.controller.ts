@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import Publication from '../models/Publication'
 import User from "../models/User";
 import fs from "fs-extra"
-import { closeConnectionInMongoose } from "../libs/constants";
 import { uploadImage, deleteImage } from "../libs/cloudinary";
+import { closeConnectionInMongoose } from "../libs/constants";
 import { CreatePublicationType, GetOrDeletePublicationByIdType } from '../schemas/publications.schema'
 
 
@@ -26,8 +26,6 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
           }
           await fs.unlink(req.file.path)
         }
-
-
         const publicationSaved = await publication.save()
         const postIdForTheUser = publicationSaved?._id
         if (user != undefined) {
@@ -41,19 +39,6 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
         res.status(400).send("Mandaste cualquier cosa")
     }
 }
-
-export const getAllPosts = async (_req: Request, res: Response) => {
-    try {
-        // Traes los post por id en base a sus followings
-        const posts = await Publication.find()
-        res.status(200).json(posts)
-        closeConnectionInMongoose
-    } catch (error) {
-        console.log(error)
-        res.status(500).send('An internal server error occurred');
-    }
-}
-
 
 export const getPostById = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
     try {
@@ -89,5 +74,48 @@ export const deletePost = async (req: Request<GetOrDeletePublicationByIdType, un
     } catch (error) {
         res.status(500).send('An internal server error occurred');
         console.log(error)
+    }
+}
+
+export const commentPost = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const { value } = req.body
+        if(value === undefined) res.status(400).json("El comentario no puede estar vacío")
+        if(value.length > 500)  res.status(400).json("El comentario no puede superar los 500 caracteres")
+        const post = await Publication.findById({ _id: id })
+        post.comments.push(value)
+        const updatedPost = await Publication.findByIdAndUpdate(id, post, {new: true})
+        res.status(200).json(updatedPost)
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An internal server error occurred');
+    }
+}
+
+export const likePost = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const post = await Publication.findById({ _id: id })
+        const updatedPost = await Publication.findByIdAndUpdate(id, {likes: post.likes + 1}, {new: true})
+        res.status(200).json(updatedPost)
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An internal server error occurred');
+    }
+}
+
+export const dislikePost = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const post = await Publication.findById({ _id: id })
+        const updatedPost = await Publication.findByIdAndUpdate(id, {likes: post.likes - 1}, {new: true})
+        res.status(200).json(updatedPost)
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An internal server error occurred');
     }
 }

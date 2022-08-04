@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createPost, getPostById, deletePost } from '../controllers/publications.controller';
+import { createPost, getPostById, deletePost, commentPost, likePost, dislikePost } from '../controllers/publications.controller';
 import {getAllPostsByFollowings} from '../controllers/interaction/getAllPostsByFollowings.controller'
 import { TokenValidator } from '../libs/tokenValidator';
 import { schemaValidation } from '../libs/schemasValidator';
@@ -8,6 +8,11 @@ import { CreatePublicationSchema, GetOrDeletePublicationByIdSchema } from '../sc
 const router = Router()
 
 router.post('/post', TokenValidator, multer.single('image'), schemaValidation(CreatePublicationSchema), createPost)
+router.patch('/like/:id', TokenValidator, likePost)
+router.patch('/dislike/:id', TokenValidator, dislikePost)
+router.post('/post/:id', TokenValidator,  commentPost)
+
+
 
 router.get('/posts', TokenValidator, getAllPostsByFollowings) 
 
