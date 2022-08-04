@@ -10,12 +10,12 @@ import { CreatePublicationType, GetOrDeletePublicationByIdType } from '../schema
 export const createPost = async (req: Request<unknown, unknown, CreatePublicationType>, res: Response) => {
     try {
         const { content, price } = req.body
-
-        const user = await User.findById(req.userId)
+        const priceValue = Number(price)
+        const user = await User.findById(req.userId, { password: 0 })
         if (!user) return res.status(404).json("No user found")
         const publication = new Publication({ 
             content, 
-            price, 
+            priceValue, 
             user: user?._id
         })
         if(req.file) {

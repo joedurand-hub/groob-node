@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { searchUser } from '../controllers/interaction_logic/search_user';
+import { searchUser } from '../controllers/interaction/searchUser.controller';
 import { TokenValidator } from '../libs/tokenValidator';
 const router = Router()
 

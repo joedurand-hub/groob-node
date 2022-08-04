@@ -1,5 +1,4 @@
 import { RequestHandler, Request, Response } from "express";
-// import Publication, { PublicationI } from '../models/Publication'
 import User from '../../models/User'
 
 

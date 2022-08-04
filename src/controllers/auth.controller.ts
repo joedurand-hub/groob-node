@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "../models/User";
 import jwt from "jsonwebtoken"
-// import { serialize } from "cookie";
 import { LoginBodyType, SignupBodyType } from "../schemas/auth..schema";
 
 const closeConnectionInMongoose = mongoose.connection.close();

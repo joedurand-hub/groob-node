@@ -6,13 +6,13 @@ const closeConnectionInMongoose = mongoose.connection.close();
 
 export const follow = async (req: Request, res: Response) => {
     try {
-        const { sigo_a } = req.body;
+        const { followTo } = req.body;
         const myUser = await User.findById(req.userId)
         if (myUser != undefined) {
-            myUser.followings = myUser.followings?.concat(sigo_a)
+            myUser.followings = myUser.followings?.concat(followTo)
         }
         await myUser.save()
-        const userWithNewFollower = await User.findById(sigo_a)
+        const userWithNewFollower = await User.findById(followTo)
         if (userWithNewFollower != undefined) {
             userWithNewFollower.followers = userWithNewFollower.followers.concat(myUser?._id)
         }
