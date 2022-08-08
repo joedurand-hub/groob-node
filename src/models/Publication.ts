@@ -15,6 +15,7 @@ const publicationSchema = new Schema({
     likes: {
         type: Number, default: 0,
     },
+    explicitContent: { type: Boolean, default: false},
     comments: {
         type: [String], default: [],  maxlength: 500,
     },
@@ -26,6 +27,8 @@ const publicationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    userName: {type: String},
+    profilePicture: {type: String}
 })
 
 export default model('Publication', publicationSchema)

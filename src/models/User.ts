@@ -7,7 +7,8 @@ const userSchema = new Schema({
     min: 3,
     maxlength: 16,
     requiered: true,
-    lowercase: true
+    lowercase: true,
+    unique: true,
   },
   email: {
     type: String,
@@ -24,12 +25,14 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  firstName: {type: String, default: " "},
-  lastName: {type: String, default: " "},
-  description: {type: String, default: " "},
+  firstName: {type: String, default: ""},
+  lastName: {type: String, default: ""},
+  description: {type: String, default: ""},
   profilePicture: { public_id: String,
     secure_url: String
   },
+  verified: { type: Boolean, default: false},
+  online: {type: Boolean, default: false},
   premium: { type: Boolean, default: false},
   explicitContent: { type: Boolean, default: false},
   followers: {type: [String], default: [] },
