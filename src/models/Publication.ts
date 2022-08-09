@@ -4,13 +4,13 @@ const publicationSchema = new Schema({
     content: {
         type: String, required: false, trim: true
     },
-    image: {
+    images: [{
         public_id: String,
         secure_url: String, 
         required: false, 
-    },
+    }],
     price: {
-        type: Number, required: false, trim: true
+        type: Number, required: false, trim: true, default: 0,
     },
     likes: {
         type: Number, default: 0,

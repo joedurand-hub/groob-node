@@ -10,31 +10,27 @@ import { CreatePublicationType, GetOrDeletePublicationByIdType } from '../schema
 export const createPost = async (req: Request<unknown, unknown, CreatePublicationType>, res: Response) => {
     try {
         const { content, price, explicitContent } = req.body
-        const priceValue = Number(price)
+        console.log(price)
+        const priceValue: number = parseInt(price)
         const user = await User.findById(req.userId, { password: 0 })
         if (!user) return res.status(404).json("No user found")
         const publication = new Publication({ 
-            content, 
-            priceValue, 
-            explicitContent,
-            user: user?._id,
-            userName: user?.userName,
+            content, price: priceValue, explicitContent, user: user?._id, userName: user?.userName,
             profilePicture: user?.profilePicture.secure_url 
         })
-        if(req.file) {
-            console.log(req.file)
-           const result = await uploadImage({ filePath: req.file.path })
-          publication.image = {
-            public_id: result.public_id,
-            secure_url: result.secure_url, 
-          }
-          await fs.unlink(req.file.path)
+        if(req.files) {
+            const files = req.files['images']
+            const data: any[] = []
+            for (const file of files) {
+                const result = await uploadImage({filePath: file.path}) 
+                data.push({public_id: result.public_id, secure_url: result.secure_url})
+                await fs.unlink(file.path)
+            }
+            publication.images = data
         }
         const publicationSaved = await publication.save()
         const postIdForTheUser = publicationSaved?._id
-        if (user != undefined) {
-            user.publications = user.publications.concat(postIdForTheUser)
-        }
+        if (user != undefined) user.publications = user.publications.concat(postIdForTheUser)
         await user.save()
         res.status(201).json(publicationSaved)
         closeConnectionInMongoose
