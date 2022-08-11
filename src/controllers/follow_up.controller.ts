@@ -9,7 +9,7 @@ export const follow = async (req: Request, res: Response) => {
         const { followTo } = req.body;
         const myUser = await User.findById(req.userId)
         if (myUser != undefined) {
-            myUser.followings = myUser.followings?.concat(followTo)
+            myUser.followings = myUser.followings.concat(followTo)
         }
         await myUser.save()
         const userWithNewFollower = await User.findById(followTo)
@@ -30,11 +30,12 @@ export const unfollow = async (req: Request, res: Response) => {
     try {
         const { idOfTheUserToUnfollow } = req.body;
         const otherUser = await User.findById(idOfTheUserToUnfollow)
+        const myUser = await User.findById(req.userId)
+
         if (otherUser !== undefined) {
             otherUser.followers = otherUser.followers.filter((id) => id !== myUser?._id)
         }
         await otherUser.save()
-        const myUser = await User.findById(req.userId)
         if (myUser !== undefined) {
             myUser.followings = myUser.followings.filter((id) => id !== idOfTheUserToUnfollow)
         }

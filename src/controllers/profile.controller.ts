@@ -41,11 +41,19 @@ export const getProfileById = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
     res: Response) => {
     try {
+        console.log(req.userId)
+        const myUser = await User.findById(req.userId)
         const { id } = req.params
-        console.log("el aidi:", id)
         const profileData = await User.findById(id, { password: 0 })
         console.log(profileData)
-        res.status(200).json(profileData)
+        const myIdInFollowers = profileData.followers.find(id => {
+            if(id === myUser._id.toString()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        res.status(200).json({profileData, myIdInFollowers: myIdInFollowers})
         return closeConnectionInMongoose
     } catch (error) {
         console.log("Cannot get profile", error)
@@ -69,10 +77,10 @@ export const updateProfile = async (
            await fs.unlink(req.file.path)
          }
         await user.save()
-        const userUpdated = await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
             { _id: user._id },
             { userName, description, age, firstName, lastName })
-        res.status(200).json(userUpdated);
+        res.status(200).json("User updated!");
         return closeConnectionInMongoose
     } catch (error) {
         console.log("Error:", error)
