@@ -31,17 +31,20 @@ export const unfollow = async (req: Request, res: Response) => {
         const { idOfTheUserToUnfollow } = req.body;
         const otherUser = await User.findById(idOfTheUserToUnfollow)
         const myUser = await User.findById(req.userId)
-
-        if (otherUser !== undefined) {
-            otherUser.followers = otherUser.followers.filter((id) => id !== myUser?._id)
-        }
-        await otherUser.save()
-        if (myUser !== undefined) {
+        
+        if (myUser) {
             myUser.followings = myUser.followings.filter((id) => id !== idOfTheUserToUnfollow)
         }
         await myUser.save()
-        closeConnectionInMongoose
+
+        const idUser = myUser._id
+        if (otherUser) {
+            otherUser.followers = otherUser.followers.filter((id) => id !== idUser.toString())
+        }
+        await otherUser.save()
+        
         res.json({ done: true })
+        closeConnectionInMongoose
     }
     catch (error) {
         console.log(error)

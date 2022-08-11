@@ -14,7 +14,7 @@ router.get('/profileById/:id', schemaValidation(ValidateProfileParamsSchema), To
 router.get('/profiles', getAllProfiles)
 
 router.put('/profile/:id', TokenValidator, 
-schemaValidation(ValidateProfileParamsSchema), multer.single('image'), schemaValidation(UpdateProfileSchema), updateProfile)
+schemaValidation(ValidateProfileParamsSchema), multer.single('images'), schemaValidation(UpdateProfileSchema), updateProfile)
 
 router.delete('/profile/:id', TokenValidator, 
 schemaValidation(ValidateProfileParamsSchema), deleteProfile)
