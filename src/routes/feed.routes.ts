@@ -12,16 +12,8 @@ router.post('/post', TokenValidator, multer.fields([{
     maxCount: 7
 }]), schemaValidation(CreatePublicationSchema), createPost)
 
-// router.post('/post', TokenValidator, multer.single('image'), 
-// schemaValidation(CreatePublicationSchema), createPost)
-
-
-
-
-
-
-router.patch('/like/:id', TokenValidator, likePost)
-router.patch('/dislike/:id', TokenValidator, dislikePost)
+router.post('/like/:id', TokenValidator, likePost)
+router.post('/dislike/:id', TokenValidator, dislikePost)
 router.post('/post/:id', TokenValidator,  commentPost)
 
 

@@ -43,7 +43,7 @@ export const unfollow = async (req: Request, res: Response) => {
         }
         await otherUser.save()
         
-        res.json({ done: true })
+        res.json(true)
         closeConnectionInMongoose
     }
     catch (error) {

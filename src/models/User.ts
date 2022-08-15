@@ -31,6 +31,9 @@ const userSchema = new Schema({
   profilePicture: { public_id: String,
     secure_url: String
   },
+  fiatWallets: [{ CBU: Number, ALIAS: String, bank: String}],
+  cryptoWallets: [{ Coin: String, Red: String, Address: String}],
+  gender: { type: String, default: "Other"},
   verified: { type: Boolean, default: false},
   online: {type: Boolean, default: false},
   premium: { type: Boolean, default: false},

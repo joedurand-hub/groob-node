@@ -98,9 +98,11 @@ export const commentPost = async (req: Request, res: Response) => {
 export const likePost = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
+        const { idPostLiked } = req.body
+        console.log(idPostLiked)
         const post = await Publication.findById({ _id: id })
         const updatedPost = await Publication.findByIdAndUpdate(id, { likes: post.likes + 1 }, { new: true })
-        res.status(200).json(updatedPost)
+        res.status(200).json(updatedPost.likes)
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)
