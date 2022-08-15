@@ -3,6 +3,7 @@ import { getProfile, deleteProfile, updateProfile, getProfileById, getAllProfile
 import { TokenValidator } from '../libs/tokenValidator';
 import { schemaValidation } from '../libs/schemasValidator';
 import { UpdateProfileSchema, ValidateProfileParamsSchema } from '../schemas/profile.schema';
+import multer from "../libs/multer"
 
 const router = Router()
 
@@ -13,7 +14,7 @@ router.get('/profileById/:id', schemaValidation(ValidateProfileParamsSchema), To
 router.get('/profiles', getAllProfiles)
 
 router.put('/profile/:id', TokenValidator, 
-schemaValidation(ValidateProfileParamsSchema), schemaValidation(UpdateProfileSchema), updateProfile)
+schemaValidation(ValidateProfileParamsSchema), multer.single('images'), schemaValidation(UpdateProfileSchema), updateProfile)
 
 router.delete('/profile/:id', TokenValidator, 
 schemaValidation(ValidateProfileParamsSchema), deleteProfile)

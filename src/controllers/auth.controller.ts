@@ -16,7 +16,8 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
         const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 1204800
         })
-
+        user.online = true
+        await user.save()
         res.cookie('authToken', token)
         res.status(200).json({message: 'Success'})
     } catch (error) {
@@ -33,12 +34,13 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
         if (!user) return res.status(400).json('Email or password is wrong')
         const passwordFromLogin = await user.validatePassword(password)
         if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
-
+        user.online = true
         const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
             expiresIn: 604800
         })
         res.cookie('authToken', token)
         res.status(200).json({message: 'Success'})
+        await user.save()
         closeConnectionInMongoose;
     } catch (error) {
         console.log("error:", error)
@@ -46,8 +48,11 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
     }
 }
 
-export const logout = async (_req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
   try {
+    const user = await User.findById(req.userId)
+    user.online = false
+    await user.save()
     res.clearCookie('authToken');
     res.send('Cookie deleted');
   } catch (error) {

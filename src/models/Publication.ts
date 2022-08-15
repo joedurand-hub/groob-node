@@ -4,17 +4,18 @@ const publicationSchema = new Schema({
     content: {
         type: String, required: false, trim: true
     },
-    image: {
+    images: [{
         public_id: String,
         secure_url: String, 
         required: false, 
-    },
+    }],
     price: {
-        type: Number, required: false, trim: true
+        type: Number, required: false, trim: true, default: 0,
     },
     likes: {
         type: Number, default: 0,
     },
+    explicitContent: { type: Boolean, default: false},
     comments: {
         type: [String], default: [],  maxlength: 500,
     },
@@ -26,6 +27,8 @@ const publicationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    userName: {type: String},
+    profilePicture: {type: String}
 })
 
 export default model('Publication', publicationSchema)

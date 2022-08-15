@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export const CreatePublicationSchema = z.object({
     body: z.object({
-        content: z.string().nonempty().max(500).optional(),
-        image: z.string().optional(),
-        price: z.number().nonnegative().optional()
+        content: z.string().max(500).optional(),
+        price: z.any(),
+        explicitContent: z.boolean().optional()
     }),
     // params: z.object({
     //     id: z.string().min(17)

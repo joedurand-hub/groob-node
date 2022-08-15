@@ -7,9 +7,13 @@ import multer from "../libs/multer"
 import { CreatePublicationSchema, GetOrDeletePublicationByIdSchema } from '../schemas/publications.schema';
 const router = Router()
 
-router.post('/post', TokenValidator, multer.single('image'), schemaValidation(CreatePublicationSchema), createPost)
-router.patch('/like/:id', TokenValidator, likePost)
-router.patch('/dislike/:id', TokenValidator, dislikePost)
+router.post('/post', TokenValidator, multer.fields([{
+    name: 'images', 
+    maxCount: 7
+}]), schemaValidation(CreatePublicationSchema), createPost)
+
+router.post('/like/:id', TokenValidator, likePost)
+router.post('/dislike/:id', TokenValidator, dislikePost)
 router.post('/post/:id', TokenValidator,  commentPost)
 
 
