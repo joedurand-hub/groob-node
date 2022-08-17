@@ -1,5 +1,6 @@
 import express from "express"
 import path from 'path'
+import http from "http"
 import cookieParser from "cookie-parser"
 import morgan from 'morgan'
 import cors from 'cors'
@@ -9,8 +10,15 @@ import profileRoutes from './routes/profile.routes'
 import searchRoutes from './routes/search.routes'
 import followRoutes from './routes/follow.routes'
 
+import sockets from "./sockets"
+
 // Inicialization
 const app = express()
+const server = http.createServer(app)
+const socketIo = sockets(server)
+
+export const io = socketIo;
+
 // Settings
 app.set('port', process.env.PORT || 8080)
 // Middlewares
@@ -34,5 +42,4 @@ app.use(followRoutes)
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.static(path.join(__dirname, 'public')))
 
-
-export default app;
+export default server;

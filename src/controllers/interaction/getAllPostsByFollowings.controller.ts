@@ -6,7 +6,7 @@ import { closeConnectionInMongoose } from "../../libs/constants";
 export const getAllPostsByFollowings = async (req: Request, res: Response) => {
     try {
 
-        const myUser = await User.findById(req.userId, { password: 0, followers: 0, followings: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
+        const myUser = await User.findById(req.userId, { password: 0, followers: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
 
         // traigo mi usuario y busco los id de mis publicaciones
         let myPosts = myUser.publications.map((id) => id)
@@ -17,28 +17,24 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
                 $in: myPosts
             }
         })
-        // postsByMyUser.push(myUser)
-        res.json(postsByMyUser)
-        // console.log(postsByMyUser) // acá deberían estar todas mis publicaciones con mis datos
+        
+        if (myUser !== undefined) {
+            let allMyIds = myUser.followings.map((id) => id) 
+            console.log(allMyIds)
+            const postsByFollowings = await Publication.find({
+                user: {
+                    $in: allMyIds
+                }
+            })
+            if(postsByFollowings.length > 0) {
 
-        // if (myUser !== undefined) {
-        //     let allMyIds = myUser.followings.map((id) => id) 
-        //     const postsByFollowings = await Publication.find({
-        //         user: {
-        //             $in: allMyIds
-        //         }
-        //     })
+                const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
+                res.status(200).json(data)
+            } 
 
-        //     let idsInPost = postsByFollowings.map((obj) => obj.user) 
-        //     const usersId = await User.find({
-        //         _id: {
-        //             $in: idsInPost
-        //         }
-        //     }, { password: 0 }, {followers: 0})
+        }
+        res.status(200).json(postsByMyUser)
 
-        //     console.log(postsByMyUser)
-
-        //     const data = usersId.concat(postsByFollowings) // concateno los usuarios y los posts
         //     const allDataForFollowings = data.map(obj => {
         //         if(obj.content && obj.image === undefined && obj.price === undefined) {
         //             return {

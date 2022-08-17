@@ -8,10 +8,25 @@ import { closeConnectionInMongoose } from "../libs/constants";
 import { UpdateProfileBodyType, ValidateProfileParamsType } from "../schemas/profile.schema";
 
 
+
+
+import {io} from "../app"
+
 export const getProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
     res: Response) => {
     try {
+        console.log("socket io: ", io)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         const profileData = await User.findById(req.userId, { password: 0 }).populate({
             path: 'publications',
             select: 'publications',
