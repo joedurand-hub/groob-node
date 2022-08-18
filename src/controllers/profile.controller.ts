@@ -35,7 +35,7 @@ export const getReducedUser = async (req: Request, res: Response) => {
 
         const myUser = await User.findById(req.userId, { password: 0, followers: 0, followings: 0, publications: 0, description: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
         res.status(200).json(myUser)
-
+        return closeConnectionInMongoose
     } catch (error) {
         console.log("Cannot get profile", error)
         return res.status(404).json(error)
@@ -44,10 +44,10 @@ export const getReducedUser = async (req: Request, res: Response) => {
 }
 
 
-export const getReducedUserById = async (req: Request, res: Response) => {
+export const getReducedUserById = async (req: Request<ValidateProfileParamsType, unknown, unknown>, res: Response) => {
     try {
-        const { userId } = req.params
-        const user = await User.findById(userId, { password: 0, followers: 0, followings: 0, publications: 0, description: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
+        const { id } = req.params
+        const user = await User.findById(id, { password: 0, followers: 0, followings: 0, publications: 0, description: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
         res.status(200).json(user)
 
     } catch (error) {

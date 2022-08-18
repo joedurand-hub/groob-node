@@ -12,8 +12,10 @@ router.get('/profile', TokenValidator, getProfile)
 router.get('/profile/:id', schemaValidation(ValidateProfileParamsSchema), TokenValidator, getProfileById)
 
 router.get('/profiles', getAllProfiles)
-router.get('/profile/reduced', TokenValidator, getReducedUser)
-router.get('/profile/reduced/:userId', TokenValidator, getReducedUserById)
+
+router.get('/profile-reduced', TokenValidator, getReducedUser)
+
+router.get('/profiles-reduced/:id', TokenValidator, getReducedUserById)
 
 router.put('/profile/:id', TokenValidator, 
 schemaValidation(ValidateProfileParamsSchema), multer.single('images'), schemaValidation(UpdateProfileSchema), updateProfile)
