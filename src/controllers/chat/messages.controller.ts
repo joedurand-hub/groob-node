@@ -1,0 +1,35 @@
+import { Request, Response } from "express";
+import Message from "../../models/Message";
+import { closeConnectionInMongoose } from "../../libs/constants";
+
+
+export const addMessage = async (req: Request, res: Response) => {
+    try {
+        const {chatId, senderId, text} = req.body
+        const newMessage = new Message({chatId, senderId, text})
+        const result = await newMessage.save()
+
+        closeConnectionInMongoose
+        res.status(200).json(result)
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json(error)
+    }
+}
+
+
+export const getMessages = async (req: Request, res: Response) => {
+    try {
+        const { chatId } = req.params
+        const chat = await Message.find({chatId})
+
+        closeConnectionInMongoose
+        res.status(200).json(chat)
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json(error)
+    }
+}
+
