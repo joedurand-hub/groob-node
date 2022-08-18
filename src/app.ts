@@ -4,12 +4,12 @@ import http from "http"
 import cookieParser from "cookie-parser"
 import morgan from 'morgan'
 import cors from 'cors'
-import authRoutes from './routes/auth.routes'
-import feedRoutes from './routes/feed.routes'
-import profileRoutes from './routes/profile.routes'
-import searchRoutes from './routes/search.routes'
-import followRoutes from './routes/follow.routes'
-
+import authRoute from './routes/auth.routes'
+import feedRoute from './routes/feed.routes'
+import profileRoute from './routes/profile.routes'
+import searchRoute from './routes/search.routes'
+import followRoute from './routes/follow.routes'
+import chatRoute from './routes/chat.routes'
 import sockets from "./sockets"
 
 // Inicialization
@@ -17,6 +17,7 @@ const app = express()
 const server = http.createServer(app)
 const socketIo = sockets(server)
 
+// export instance for new sockets in endpoints
 export const io = socketIo;
 
 // Settings
@@ -33,11 +34,12 @@ var corsOptions = {
 }
 app.use(cors(corsOptions));
 // Routes
-app.use(authRoutes)
-app.use(profileRoutes)
-app.use(feedRoutes)
-app.use(searchRoutes)
-app.use(followRoutes)
+app.use(authRoute)
+app.use(profileRoute)
+app.use(feedRoute)
+app.use(searchRoute)
+app.use(followRoute)
+app.use(chatRoute)
 // Static files
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.static(path.join(__dirname, 'public')))

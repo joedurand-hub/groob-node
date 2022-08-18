@@ -1,17 +1,15 @@
 import { Schema, model } from 'mongoose'
 
 const messageSchema = new Schema({
-    conversationId: {
+    chatId: {
+        // type: Schema.Types.ObjectId,
+        // ref: "Chat",
         type: String, required: false, trim: true
     },
-    remitter: {
+    remitterId: {
         type: String, required: false, trim: true
     },
-    
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-    },
-})
+    text: { type: String },
+}, { timestamps: true, versionKey: false })
 
 export default model('Message', messageSchema)

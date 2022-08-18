@@ -10,23 +10,12 @@ import { UpdateProfileBodyType, ValidateProfileParamsType } from "../schemas/pro
 
 
 
-import {io} from "../app"
+// import {io} from "../app"
 
 export const getProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
     res: Response) => {
-    try {
-        console.log("socket io: ", io)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    try {        
         const profileData = await User.findById(req.userId, { password: 0 }).populate({
             path: 'publications',
             select: 'publications',
