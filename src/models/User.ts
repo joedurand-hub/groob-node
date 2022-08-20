@@ -38,6 +38,7 @@ const userSchema = new Schema({
   verified: { type: Boolean, default: false },
   online: { type: Boolean, default: false },
   premium: { type: Boolean, default: false },
+  visits: { type: [String] },
   explicitContent: { type: Boolean, default: false },
   followers: { type: [String], default: [], trim: true },
   followings: { type: [String], default: [], trim: true },

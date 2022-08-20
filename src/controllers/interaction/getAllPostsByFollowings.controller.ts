@@ -17,82 +17,22 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
                 $in: myPosts
             }
         })
-        
-        if (myUser !== undefined) {
-            let allMyIds = myUser.followings.map((id) => id) 
-            console.log(allMyIds)
-            const postsByFollowings = await Publication.find({
-                user: {
-                    $in: allMyIds
-                }
-            })
-            if(postsByFollowings.length > 0) {
 
-                const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
-                res.status(200).json(data)
-            } 
+        let allMyIds = myUser.followings.map((id) => id)
+        // busco las publicaciones de quienes sigo
+        const postsByFollowings = await Publication.find({
+            user: {
+                $in: allMyIds
+            }
+        })
 
-        }
-        res.status(200).json(postsByMyUser)
-
-        //     const allDataForFollowings = data.map(obj => {
-        //         if(obj.content && obj.image === undefined && obj.price === undefined) {
-        //             return {
-        //                 user: obj.user,
-        //                 userId: obj._id,
-        //                 username: obj.userName, 
-        //                 picture: obj.profilePicture, 
-        //                 content: obj.content, 
-        //                 date: obj.createdAt
-        //             }
-        //         }
-        //         if(obj.image && obj.content === undefined && obj.price === undefined) {
-        //             return {
-        //                 user: obj.user,
-        //                 userId: obj._id,
-        //                 username: obj.userName, 
-        //                 picture: obj.profilePicture, 
-        //                 image: obj.image.secure_url, 
-        //                 imageId: obj.image.public_id,
-        //                 date: obj.createdAt
-        //             }
-        //         }
-        //         if(obj.image && obj.content && obj.price === undefined) {
-        //             return {
-        //                 user: obj.user,
-        //                 userId: obj._id,
-        //                 username: obj.userName, 
-        //                 picture: obj.profilePicture, 
-        //                 content: obj.content, 
-        //                 image: obj.image.secure_url, 
-        //                 imageId: obj.image.public_id,
-        //                 date: obj.createdAt
-        //             }
-        //         }
-        //         if(obj.price && obj.image && obj.content) {
-        //             return {
-        //                 user: obj.user,
-        //                 userId: obj._id,
-        //                 username: obj.userName, 
-        //                 picture: obj.profilePicture, 
-        //                 content: obj.content, 
-        //                 image: obj.image.secure_url, 
-        //                 imageId: obj.image.public_id,
-        //                 price: obj.price, 
-        //                 date: obj.createdAt
-        //             }
-        //         }
-        //         })
-        //     console.log(allDataForFollowings)
-
-        //         const allPostsInFeed = postsByMyUser.concat(allDataForFollowings)
-        //         res.json(allPostsInFeed) // funciona, falta ordenar por fecha mas reciente
+        const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
+        res.status(200).json(data)
 
         closeConnectionInMongoose
-        // }
     } catch (error) {
         console.log(error)
-        res.status(400).json(error)
+        res.status(400).json(error) 
     }
 }
 

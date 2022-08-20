@@ -1,11 +1,10 @@
 import { Router } from 'express'
 import { addMessage, getMessages } from '../controllers/chat/messages.controller';
-// import { TokenValidator } from '../libs/tokenValidator';
+import { TokenValidator } from '../libs/tokenValidator';
 
 const router = Router()
 
-router.post('/message',  addMessage)
-router.get('/message/:chatId',  getMessages)
-// router.get('/chat/find/:firstId/:secondId',  findChat)
+router.post('/message', TokenValidator, addMessage)
+router.get('/message/:chatId', TokenValidator, getMessages)
 
 export default router;

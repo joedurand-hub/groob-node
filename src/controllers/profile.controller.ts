@@ -73,19 +73,16 @@ export const getProfileById = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
     res: Response) => {
     try {
-        console.log(req.userId)
-        const myUser = await User.findById(req.userId)
         const { id } = req.params
         const profileData = await User.findById(id, { password: 0 })
-        console.log(profileData)
-        const myIdInFollowers = profileData.followers.find(id => {
-            if (id === myUser._id.toString()) {
-                return true
-            } else {
-                return false
-            }
-        })
-        res.status(200).json({ profileData, myIdInFollowers: myIdInFollowers })
+
+        const myId = req.userId?.toString()
+        if(profileData !== undefined) {
+            profileData.visits = profileData.visits.concat(myId)
+        }
+        await profileData.save()
+
+        res.status(200).json({ profileData, myId })
         return closeConnectionInMongoose
     } catch (error) {
         console.log("Cannot get profile", error)
