@@ -6,19 +6,25 @@ import { closeConnectionInMongoose } from "../../libs/constants";
 
 export const createChat = async (req: Request, res: Response) => {
     try {
-        // const user = await User.findById(req.userId)
-
-        const newChat = new Chat({
-            members: [req.body.senderId, req.body.recivedId]
+        const user = await User.findById(req.userId)
+        const chat = await Chat.findOne({
+            members: { $all: [req.userId, req.body.recivedId] }
         })
-        const result = await newChat.save()
-        // const chatId = result?._id
-        // if (user != undefined) {
-        //     user.chats = user.chats.concat(chatId)
-        // }
-        // await user.save()
-        closeConnectionInMongoose
-        res.status(200).json(result)
+
+        if (chat !== undefined && chat !== null) {
+            res.status(200).json({ message: "el chat ya existe boludín:", chat })
+            return closeConnectionInMongoose
+        }
+
+        else {
+            const newChat = new Chat({ members: [req.body.senderId, req.body.recivedId] })
+            const result = await newChat.save()
+            const chatId = result?._id
+            if (user != undefined) user.chats = user.chats.concat(chatId)
+            await user.save()
+            res.status(200).json(result)
+            return closeConnectionInMongoose
+        }
 
     } catch (error) {
         console.error(error)
@@ -29,13 +35,46 @@ export const createChat = async (req: Request, res: Response) => {
 
 export const userChats = async (req: Request, res: Response) => {
     try {
+        const user = await User.findById(req.userId)
         const chat = await Chat.find({
-            members: {$in: [req.params.userId]}
+            members: { $in: [req.userId] }
         })
 
-        closeConnectionInMongoose
-        res.status(200).json(chat)
+        const userName = user?.userName
+        const online = user?.online
+        const profilePicture = user?.profilePicture?.secure_url
+        const myId = user._id.toString()
 
+        const usersInMyChat = chat.map(obj => obj.members)
+        const membersId = usersInMyChat.map(member => member[1])
+        const usersId = membersId.filter(id => id !== myId)
+
+        const allMyChats = await User.find({
+            _id: {
+                $in: usersId
+            }
+        })
+
+        const chatIdAndUserId = chat.map(user => {
+            return {
+                id: user._id.toString(),
+                member: user.members[1],
+            }
+        })
+
+        const userDataInTheChat = allMyChats.map(user => {
+            return {
+                id: user._id.toString(),
+                userName: user.userName,
+                profilePicture: user.profilePicture.secure_url,
+                online: user.online,
+            }
+        })
+
+
+        res.status(200).json({ chatIdAndUserId, userDataInTheChat, userName, profilePicture, online })
+
+        return closeConnectionInMongoose
     } catch (error) {
         console.log(error)
         res.status(400).json(error)
@@ -46,13 +85,13 @@ export const userChats = async (req: Request, res: Response) => {
 export const findChat = async (req: Request, res: Response) => {
     try {
         const chat = await Chat.findOne({
-            members: {$all: [req.userId, req.params.secondId]}
-        })  
+            members: { $all: [req.userId, req.params.secondId] }
+        })
         const user = await User.findById(req.params.secondId)
         const userName = user?.userName
         const profilePicture = user?.profilePicture?.secure_url
         closeConnectionInMongoose
-        res.status(200).json({chat, userName, profilePicture})
+        res.status(200).json({ chat, userName, profilePicture })
 
     } catch (error) {
         console.log(error)
