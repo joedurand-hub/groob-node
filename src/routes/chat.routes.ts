@@ -5,7 +5,7 @@ import { TokenValidator } from '../libs/tokenValidator';
 const router = Router()
 
 router.post('/chat', TokenValidator, createChat)
-router.get('/chats/:userId', TokenValidator, userChats)
+router.get('/chats', TokenValidator, userChats)
 router.get('/chat/:secondId', TokenValidator, findChat)
 
 export default router;
