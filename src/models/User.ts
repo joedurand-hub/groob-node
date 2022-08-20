@@ -25,21 +25,23 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  firstName: {type: String, default: ""},
-  lastName: {type: String, default: ""},
-  description: {type: String, default: ""},
-  profilePicture: { public_id: String,
+  firstName: { type: String, default: "" },
+  lastName: { type: String, default: "" },
+  description: { type: String, default: "" },
+  profilePicture: {
+    public_id: String,
     secure_url: String
   },
-  fiatWallets: [{ CBU: Number, ALIAS: String, bank: String}],
-  cryptoWallets: [{ Coin: String, Red: String, Address: String}],
-  gender: { type: String, default: "Other"},
-  verified: { type: Boolean, default: false},
-  online: {type: Boolean, default: false},
-  premium: { type: Boolean, default: false},
-  explicitContent: { type: Boolean, default: false},
-  followers: {type: [String], default: [], trim: true },
-  followings: {type: [String], default: [], trim: true },
+  fiatWallets: [{ CBU: Number, ALIAS: String, bank: String }],
+  cryptoWallets: [{ Coin: String, Red: String, Address: String }],
+  gender: { type: String, default: "Other" },
+  verified: { type: Boolean, default: false },
+  online: { type: Boolean, default: false },
+  premium: { type: Boolean, default: false },
+  visits: { type: [String] },
+  explicitContent: { type: Boolean, default: false },
+  followers: { type: [String], default: [], trim: true },
+  followings: { type: [String], default: [], trim: true },
   publications: [
     {
       type: Schema.Types.ObjectId,
@@ -47,6 +49,10 @@ const userSchema = new Schema({
     },
     { timestamps: true, versionKey: false },
   ],
+  chats: [{
+    type: Schema.Types.ObjectId,
+    ref: "Chat",
+  }],
 }, { timestamps: true, versionKey: false });
 
 

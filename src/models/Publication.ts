@@ -29,6 +29,6 @@ const publicationSchema = new Schema({
     },
     userName: {type: String},
     profilePicture: {type: String}
-})
+}, { timestamps: true, versionKey: false })
 
 export default model('Publication', publicationSchema)

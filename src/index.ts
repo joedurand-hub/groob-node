@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import app from "./app"
+import server from "./app"
 import './database'
 
-app.listen(app.get('port'), () => {
-    console.log(`Server on port ${app.get('port')} my friend`) 
+server.listen(8080, () => {
+    console.log(`app on port 8080`) 
 })

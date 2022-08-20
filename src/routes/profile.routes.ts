@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getProfile, deleteProfile, updateProfile, getProfileById, getAllProfiles, getAllPostsByUser } from '../controllers/profile.controller';
+import { getProfile, deleteProfile, updateProfile, getProfileById, getAllProfiles, getAllPostsByUser, getReducedUser, getReducedUserById } from '../controllers/profile.controller';
 import { TokenValidator } from '../libs/tokenValidator';
 import { schemaValidation } from '../libs/schemasValidator';
 import { UpdateProfileSchema, ValidateProfileParamsSchema } from '../schemas/profile.schema';
@@ -9,9 +9,13 @@ const router = Router()
 
 router.get('/profile', TokenValidator, getProfile)
 
-router.get('/profileById/:id', schemaValidation(ValidateProfileParamsSchema), TokenValidator, getProfileById)
+router.get('/profile/:id', schemaValidation(ValidateProfileParamsSchema), TokenValidator, getProfileById)
 
 router.get('/profiles', getAllProfiles)
+
+router.get('/profile-reduced', TokenValidator, getReducedUser)
+
+router.get('/profiles-reduced/:id', TokenValidator, getReducedUserById)
 
 router.put('/profile/:id', TokenValidator, 
 schemaValidation(ValidateProfileParamsSchema), multer.single('images'), schemaValidation(UpdateProfileSchema), updateProfile)
