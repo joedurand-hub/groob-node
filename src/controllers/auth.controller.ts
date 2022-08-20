@@ -28,20 +28,35 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
 
 export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: Response) => {
     try {
-        const { email, password } = req.body
-        
-        const user = await User.findOne({ email })
-        if (!user) return res.status(400).json('Email or password is wrong')
-        const passwordFromLogin = await user.validatePassword(password)
-        if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
-        user.online = true
-        const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
-            expiresIn: 604800
-        })
-        res.cookie('authToken', token)
-        res.status(200).json({message: 'Success'})
-        await user.save()
-        closeConnectionInMongoose;
+        const { email, userName, password } = req.body
+        if (email !== undefined && email.length > 0 && password.length > 0) {
+            const user = await User.findOne({ email })
+            const passwordFromLogin = await user.validatePassword(password)
+            if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
+            user.online = true
+            const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
+                expiresIn: 604800
+            })
+            res.cookie('authToken', token)
+            res.status(200).json({message: 'Success'})
+            await user.save()
+            return closeConnectionInMongoose;
+        }
+        if(userName !== undefined && userName.length > 0 && password.length > 0) {
+            const user = await User.findOne({ userName })
+            const passwordFromLogin = await user.validatePassword(password)
+            if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
+            user.online = true
+            const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
+                expiresIn: 604800
+            })
+            res.cookie('authToken', token)
+            res.status(200).json({message: 'Success'})
+            await user.save()
+            return closeConnectionInMongoose;
+        } 
+      
+       return closeConnectionInMongoose;
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
