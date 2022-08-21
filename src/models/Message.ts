@@ -10,6 +10,6 @@ const messageSchema = new Schema({
         type: String, required: false, trim: true
     },
     text: { type: String },
-}, { timestamps: true, versionKey: false, _id: false })
+}, { timestamps: true, versionKey: false, })
 
 export default model('Message', messageSchema)

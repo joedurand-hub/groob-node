@@ -62,7 +62,7 @@ export const userChats = async (req: Request, res: Response) => {
             }
         })
 
-        const userDataInTheChat = allMyChats.map(user => {
+        const usersDataInTheChat = allMyChats.map(user => {
             return {
                 id: user._id.toString(),
                 userName: user.userName,
@@ -72,7 +72,7 @@ export const userChats = async (req: Request, res: Response) => {
         })
 
 
-        res.status(200).json({ chatIdAndUserId, userDataInTheChat, userName, profilePicture, online })
+        res.status(200).json({ chatIdAndUserId, usersDataInTheChat, userName, profilePicture, online, myId })
 
         return closeConnectionInMongoose
     } catch (error) {
@@ -90,8 +90,9 @@ export const findChat = async (req: Request, res: Response) => {
         const user = await User.findById(req.params.secondId)
         const userName = user?.userName
         const profilePicture = user?.profilePicture?.secure_url
+        const online = user?.online
         closeConnectionInMongoose
-        res.status(200).json({ chat, userName, profilePicture })
+        res.status(200).json({ chat, userName, profilePicture, online })
 
     } catch (error) {
         console.log(error)
