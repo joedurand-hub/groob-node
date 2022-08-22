@@ -6,6 +6,7 @@ const messageSchema = new Schema({
         // ref: "Chat",
         type: String, required: false, trim: true
     },
+    senderId: {type: String},
     remitterId: {
         type: String, required: false, trim: true
     },

@@ -84,6 +84,7 @@ export const userChats = async (req: Request, res: Response) => {
 
 export const findChat = async (req: Request, res: Response) => {
     try {
+        const myId = req.userId?.toString()
         const chat = await Chat.findOne({
             members: { $all: [req.userId, req.params.secondId] }
         })
@@ -92,7 +93,7 @@ export const findChat = async (req: Request, res: Response) => {
         const profilePicture = user?.profilePicture?.secure_url
         const online = user?.online
         closeConnectionInMongoose
-        res.status(200).json({ chat, userName, profilePicture, online })
+        res.status(200).json({ chat, userName, profilePicture, online, myId })
 
     } catch (error) {
         console.log(error)
