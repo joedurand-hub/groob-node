@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Chat from "../../models/Chat"
 import User from "../../models/User"
 import { closeConnectionInMongoose } from "../../libs/constants";
-
+import { io } from "../../app";
 
 export const createChat = async (req: Request, res: Response) => {
     try {
@@ -34,9 +34,32 @@ export const createChat = async (req: Request, res: Response) => {
 
 
 export const userChats = async (req: Request, res: Response) => {
+        let activeUsers = [{userId: '', socketId: ''}];
     try {
+        // add new user
+        io.on("connection", (socket) => {
+            socket.on("newUserAdded", (newUserId) => {
+                if (!activeUsers.some((user) => user.userId === newUserId)) {
+                    activeUsers.push(
+                        {
+                            userId: newUserId,
+                            socketId: socket.id
+                        }
+                    )
+                }
+                const active = activeUsers.filter(user => user.userId !== '' )
+                console.log("users connected", active)
+                io.emit("getUsers", active) // send the users active
+            })
+            socket.on("disconnected", () => {
+                activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
+                console.log("user disconnected", activeUsers)
+                io.emit("getUsers", activeUsers)
+            })
+        })
+
         const user = await User.findById(req.userId)
-        const chat = await Chat.find({
+        const chats = await Chat.find({
             members: { $in: [req.userId] }
         })
 
@@ -45,24 +68,23 @@ export const userChats = async (req: Request, res: Response) => {
         const profilePicture = user?.profilePicture?.secure_url
         const myId = user._id.toString()
 
-        const usersInMyChat = chat.map(obj => obj.members)
-        const membersId = usersInMyChat.map(member => member[1])
-        const usersId = membersId.filter(id => id !== myId)
-
-        const allMyChats = await User.find({
+        const usersInMyChat = chats.map(obj => obj.members).flat()
+        const usersId = usersInMyChat.filter(member => member !== myId)
+        
+        const allMyChats = await User.find({ // busco los usuarios con los que tengo chats
             _id: {
                 $in: usersId
             }
         })
 
-        const chatIdAndUserId = chat.map(user => {
+        const chatIdAndUserId = chats.map(user => { // para saber con quien es el chat
             return {
                 id: user._id.toString(),
-                member: user.members[1],
+                member: user.members,
             }
         })
-
-        const usersDataInTheChat = allMyChats.map(user => {
+        
+        const usersDataInTheChat = allMyChats.map(user => { // para renderizar los datos
             return {
                 id: user._id.toString(),
                 userName: user.userName,
@@ -70,7 +92,7 @@ export const userChats = async (req: Request, res: Response) => {
                 online: user.online,
             }
         })
-
+        
 
         res.status(200).json({ chatIdAndUserId, usersDataInTheChat, userName, profilePicture, online, myId })
 
