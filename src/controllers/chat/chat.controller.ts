@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import Chat from "../../models/Chat"
 import User from "../../models/User"
 import { closeConnectionInMongoose } from "../../libs/constants";
-import { io } from "../../app";
 
 export const createChat = async (req: Request, res: Response) => {
     try {
@@ -34,34 +33,13 @@ export const createChat = async (req: Request, res: Response) => {
 
 
 export const userChats = async (req: Request, res: Response) => {
-        let activeUsers = [{userId: '', socketId: ''}];
-    try {
-        // add new user
-        io.on("connection", (socket) => {
-            socket.on("newUserAdded", (newUserId) => {
-                if (!activeUsers.some((user) => user.userId === newUserId)) {
-                    activeUsers.push(
-                        {
-                            userId: newUserId,
-                            socketId: socket.id
-                        }
-                    )
-                }
-                const active = activeUsers.filter(user => user.userId !== '' )
-                console.log("users connected", active)
-                io.emit("getUsers", active) // send the users active
-            })
-            socket.on("disconnected", () => {
-                activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
-                console.log("user disconnected", activeUsers)
-                io.emit("getUsers", activeUsers)
-            })
-        })
 
+    try {
         const user = await User.findById(req.userId)
         const chats = await Chat.find({
             members: { $in: [req.userId] }
         })
+    
 
         const userName = user?.userName
         const online = user?.online
