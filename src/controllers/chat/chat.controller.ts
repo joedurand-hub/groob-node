@@ -1,7 +1,7 @@
+import { closeConnectionInMongoose } from './../../libs/constants';
 import { Request, Response } from "express";
 import Chat from "../../models/Chat"
 import User from "../../models/User"
-import { closeConnectionInMongoose } from "../../libs/constants";
 
 export const createChat = async (req: Request, res: Response) => {
     try {
@@ -31,15 +31,13 @@ export const createChat = async (req: Request, res: Response) => {
     }
 }
 
-
 export const userChats = async (req: Request, res: Response) => {
-
     try {
         const user = await User.findById(req.userId)
         const chats = await Chat.find({
             members: { $in: [req.userId] }
         })
-    
+
 
         const userName = user?.userName
         const online = user?.online
@@ -48,7 +46,7 @@ export const userChats = async (req: Request, res: Response) => {
 
         const usersInMyChat = chats.map(obj => obj.members).flat()
         const usersId = usersInMyChat.filter(member => member !== myId)
-        
+
         const allMyChats = await User.find({ // busco los usuarios con los que tengo chats
             _id: {
                 $in: usersId
@@ -61,7 +59,7 @@ export const userChats = async (req: Request, res: Response) => {
                 member: user.members,
             }
         })
-        
+
         const usersDataInTheChat = allMyChats.map(user => { // para renderizar los datos
             return {
                 id: user._id.toString(),
@@ -70,7 +68,7 @@ export const userChats = async (req: Request, res: Response) => {
                 online: user.online,
             }
         })
-        
+
 
         res.status(200).json({ chatIdAndUserId, usersDataInTheChat, userName, profilePicture, online, myId })
 

@@ -11,15 +11,21 @@ import searchRoute from './routes/search.routes'
 import followRoute from './routes/follow.routes'
 import chatRoute from './routes/chat.routes'
 import messagesRoute from './routes/messages.routes'
-import sockets from "./sockets"
+import { Server as SocketServer } from "socket.io"
+
 
 // Inicialization
 const app = express()
 const server = http.createServer(app)
-const socketIo = sockets(server)
 
 // export instance for new sockets in endpoints
-export const io = socketIo;
+
+let io = new SocketServer(server, {
+    cors: {
+        origin: 'http://localhost:3000'
+    }
+})
+
 
 // Settings
 app.set('port', process.env.PORT || 8080)
@@ -48,5 +54,41 @@ app.use(messagesRoute)
 // Static files
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.static(path.join(__dirname, 'public')))
+
+
+let activeUsers = [{ userId: '', socketId: '' }];
+
+io.on("connection", (socket) => { // solo para mostrar usuarios online
+    socket.on("newUserAdded", (newUserId) => {
+        if (!activeUsers.some((user) => user.userId === newUserId)) {
+            activeUsers.push(
+                {
+                    userId: newUserId,
+                    socketId: socket.id
+                }
+                )
+            }
+            const active = activeUsers.filter(user => user.userId !== '' )
+            console.log("users connected", active)
+            io.emit("getUsers", active) // send the users active
+    })
+    socket.on("newMessage", (data) => {
+        if(data.text.length >= 1) {
+            console.log("2-",data)
+            const {reciverId} = data
+            const user = activeUsers.find((user) => user.userId === reciverId)
+            if(user) {
+            io.to(user.socketId).emit("reciveMessage", data);
+        }
+        }
+    })
+
+    socket.on("disconnected", () => {
+        activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
+        console.log("user disconnected", activeUsers)
+        io.emit("getUsers", activeUsers)
+    })
+})
+
 
 export default server;
