@@ -68,17 +68,17 @@ io.on("connection", (socket) => { // solo para mostrar usuarios online
                 }
                 )
             }
-            const active = activeUsers.filter(user => user.userId !== '' )
-            console.log("users connected", active)
-            io.emit("getUsers", active) // send the users active
-    })
+            io.emit("getUsers", activeUsers) // send the users active
+        })
+
     socket.on("newMessage", (data) => {
-        if(data.text.length >= 1) {
-            console.log("2-",data)
-            const {reciverId} = data
-            const user = activeUsers.find((user) => user.userId === reciverId)
+        if(data) {
+            console.log("1- data:",data)
+            const user = activeUsers.find((user) => user.userId === data.reciverId)
             if(user) {
-            io.to(user.socketId).emit("reciveMessage", data);
+                console.log("2- user: ", user)
+            // io.to(user.socketId).emit("reciveMessage", data.newSocketMessage);
+            io.emit("receiveMessage", data.newSocketMessage);
         }
         }
     })
