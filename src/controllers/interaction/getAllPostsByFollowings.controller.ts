@@ -25,10 +25,18 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
                 $in: allMyIds
             }
         })
+        if(myUser.explicitContent === true) {
+            const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
+            console.log(data)
+            
+            res.status(200).json(data)
+        } else {
+            const postWithOutExplicitContent = postsByFollowings.filter(post => post.explicitContent === false)
+            const data = postsByMyUser.concat(postWithOutExplicitContent) // concateno los usuarios y los posts
+            console.log(data)
+            res.status(200).json(data)
 
-        const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
-        res.status(200).json(data)
-
+        }
         closeConnectionInMongoose
     } catch (error) {
         console.log(error)
