@@ -33,7 +33,7 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
         const postIdForTheUser = publicationSaved?._id
         if (user != undefined) user.publications = user.publications.concat(postIdForTheUser)
         await user.save()
-        res.status(201).json(publicationSaved)
+        res.status(201).json({"success": true, publicationSaved})
         closeConnectionInMongoose
     } catch (error) {
         console.log(error)
