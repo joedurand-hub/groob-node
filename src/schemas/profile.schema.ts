@@ -10,6 +10,7 @@ export const UpdateProfileSchema = z.object({
         lastName: z.string().regex(/^[a-zA-ZÀ-ÿ\s]{2,16}$/).optional(),
         followings: z.string().optional(),
         followers: z.string().optional(),
+        explicitContent: z.boolean().optional(),
         age: z.number().nonnegative().min(13).optional(),
         
     }),
