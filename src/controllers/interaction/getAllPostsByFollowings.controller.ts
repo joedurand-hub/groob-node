@@ -25,6 +25,16 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
                 $in: allMyIds
             }
         })
+
+        let usersByPosts = await User.find({
+            user: {
+                $in: allMyIds
+            }
+        }, { password: 0, followers: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
+        
+        console.log(postsByFollowings)
+        console.log(usersByPosts)
+
         if(myUser.explicitContent === true) {
             const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
             console.log(data)

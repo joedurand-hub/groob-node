@@ -11,10 +11,11 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
     try {
         const { content, price, explicitContent } = req.body
         const priceValue: number = parseInt(price)
+        const myBoolean = explicitContent === 'true'
         const user = await User.findById(req.userId, { password: 0 })
         if (!user) return res.status(404).json("No user found")
         const publication = new Publication({
-            content, price: priceValue, explicitContent, user: user?._id, userName: user?.userName,
+            content, price: priceValue, explicitContent: myBoolean, user: user?._id, userName: user?.userName,
             profilePicture: user?.profilePicture.secure_url
         })
         if (req.files) {
