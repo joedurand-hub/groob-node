@@ -26,6 +26,9 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
             }
         })
 
+        // corto y traigo solamente 3 comentarios para mostrar en el feed
+        // const postsWithThreeCommentsForTheFeed = postsByFollowings.map(obj => obj.comments.slice(0, 2))
+
         let usersByPosts = await User.find({
             user: {
                 $in: allMyIds

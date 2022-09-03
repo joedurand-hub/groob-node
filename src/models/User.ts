@@ -42,6 +42,7 @@ const userSchema = new Schema({
   explicitContent: { type: Boolean, default: false },
   followers: { type: [String], default: [], trim: true },
   followings: { type: [String], default: [], trim: true },
+  likes: { type: [String]},
   publications: [
     {
       type: Schema.Types.ObjectId,
