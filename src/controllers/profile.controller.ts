@@ -121,9 +121,19 @@ export const deleteProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
     res: Response) => {
     try {
-        const { id } = req.params
-        await User.deleteOne({ _id: id })
-        res.status(200).json(`User deleted`)
+        const { id } = req.params;
+        const myUser = await User.findById({_id: id})
+        console.log(myUser)
+        const allPostsToDelete = myUser.publications.map(id => id)
+        
+        const allPosts = await Publication.find({
+            _id: {
+                $in: allPostsToDelete
+            }
+        })
+        const postsDeleted = await Publication.deleteMany({_id: allPosts})
+        const userDeleted = await User.deleteOne({myUser})
+        res.status(200).json({message: `User and posts deleted`, postsDeleted, userDeleted})
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)
