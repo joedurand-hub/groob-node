@@ -134,7 +134,8 @@ export const deleteProfile = async (
 export const getAllPostsByUser = async (req: Request, res: Response) => {
     // Hacer paginado cada 7 posts así en el front se realiza infinity scroll
     try {
-        const user = await User.findById(req.userId)
+        const { id } = req.params
+        const user = await User.findById(id)
         const posts = await Publication.find()
         const userId = user._id.toString()
         const postsByUser = posts.filter(post => {

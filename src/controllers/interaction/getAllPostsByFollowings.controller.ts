@@ -26,9 +26,6 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
             }
         })
 
-        // corto y traigo solamente 3 comentarios para mostrar en el feed
-        // const postsWithThreeCommentsForTheFeed = postsByFollowings.map(obj => obj.comments.slice(0, 2))
-
         let usersByPosts = await User.find({
             user: {
                 $in: allMyIds
@@ -40,14 +37,11 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
 
         if(myUser.explicitContent === true) {
             const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
-            console.log(data)
-            
             res.status(200).json(data)
         } else {
             const postWithOutExplicitContent = postsByFollowings.filter(post => post.explicitContent === false)
             const data = postsByMyUser.concat(postWithOutExplicitContent) // concateno los usuarios y los posts
-            console.log(data)
-            res.status(200).json(data)
+            res.status(200).json({data, myId: myUser?._id})
 
         }
         closeConnectionInMongoose

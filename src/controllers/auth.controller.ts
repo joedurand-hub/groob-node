@@ -9,17 +9,30 @@ const closeConnectionInMongoose = mongoose.connection.close();
 export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res: Response) => {
     try {
         const { userName, password, email } = req.body
-            const user = new User({ userName, password, email })
-            user.password = await user.encryptPassword(user.password)
-            user.profilePicture.secure_url = "https://res.cloudinary.com/groob/image/upload/v1659601590/istockphoto-1300845620-612x612_bq6yvb.jpg"
-        const userSaved = await user.save()
-        const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
-            expiresIn: 1204800
-        })
-        user.online = true
-        await user.save()
-        res.cookie('authToken', token)
-        res.status(200).json({message: 'Success'})
+        const userNameExist = await User.findOne({ userName })
+        if (userNameExist) {
+            return res.json("The username is already in use.")
+        }
+        const emailExist = await User.findOne({ email })
+        if (emailExist) {
+            return res.json("The email is already in use.")
+        }
+        else {
+            if(password.length >= 6 && password.length < 16) {
+                const user = new User({ userName, password, email })
+                user.password = await user.encryptPassword(user.password)
+                user.profilePicture.secure_url = "https://res.cloudinary.com/groob/image/upload/v1661108370/istoremovebg-preview_hzebg1.png"
+                const userSaved = await user.save()
+                const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
+                    expiresIn: 1204800
+                })
+                user.online = true
+                await user.save()
+                res.cookie('authToken', token)
+                res.status(200).json({ message: 'Success' })
+            }
+            return closeConnectionInMongoose;
+        }
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
@@ -37,13 +50,12 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            console.log(user)
             res.cookie('authToken', token)
-            res.status(200).json({message: 'Success', token})
+            res.status(200).json({ message: 'Success' })
             await user.save()
             return closeConnectionInMongoose;
         }
-        if(userName !== undefined && userName.length > 0 && password.length > 0) {
+        if (userName !== undefined && userName.length > 0 && password.length > 0) {
             const user = await User.findOne({ userName })
             const passwordFromLogin = await user.validatePassword(password)
             if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
@@ -51,14 +63,13 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            console.log(user)
             res.cookie('authToken', token)
-            res.status(200).json({message: 'Success'})
+            res.status(200).json({ message: 'Success' })
             await user.save()
             return closeConnectionInMongoose;
-        } 
-      
-       return closeConnectionInMongoose;
+        }
+
+        return closeConnectionInMongoose;
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
@@ -66,16 +77,16 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
 }
 
 export const logout = async (req: Request, res: Response) => {
-  try {
-    const user = await User.findById(req.userId)
-    user.online = false
-    await user.save()
-    res.clearCookie('authToken');
-    res.send('Cookie deleted');
-  } catch (error) {
-      console.log(error)
-      res.status(400).json(error)
-  }
+    try {
+        const user = await User.findById(req.userId)
+        user.online = false
+        await user.save()
+        res.clearCookie('authToken');
+        res.send('Cookie deleted');
+    } catch (error) {
+        console.log(error)
+        res.status(400).json(error)
+    }
 }
 
 
