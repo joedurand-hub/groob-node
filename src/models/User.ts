@@ -25,9 +25,9 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  firstName: { type: String, default: "" },
-  lastName: { type: String, default: "" },
-  description: { type: String, default: "" },
+  firstName: { type: String, default: "", lowercase: true, },
+  lastName: { type: String, default: "", lowercase: true,},
+  description: { type: String, default: "", lowercase: true,},
   profilePicture: {
     public_id: String,
     secure_url: String
