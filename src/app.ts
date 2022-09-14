@@ -1,4 +1,4 @@
-import express from "express"
+import express, { NextFunction } from "express"
 import path from 'path'
 import http from "http"
 import cookieParser from "cookie-parser"
@@ -12,6 +12,7 @@ import followRoute from './routes/follow.routes'
 import chatRoute from './routes/chat.routes'
 import messagesRoute from './routes/messages.routes'
 import { Server as SocketServer } from "socket.io"
+import type { ErrorRequestHandler } from "express";
 
 
 // Inicialization
@@ -22,25 +23,38 @@ const server = http.createServer(app)
 
 let io = new SocketServer(server, {
     cors: {
-        origin: 'http://localhost:3000'
+        origin: ['https://groob.vercel.app', 'http://localhost:3000'],
+        optionsSuccessStatus: 200,
+        credentials: true,
+        methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
     }
 })
 
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
 
+app.use(errorHandler);
 // Settings
 app.set('port', process.env.PORT || 8080)
 
 // Middlewares
 app.use(cookieParser())
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
+
 var corsOptions = {
-    origin: 'http://localhost:3000', // Aqui debemos reemplazar el * por el dominio de nuestro front
+    origin: ['https://groob.vercel.app', 'http://localhost:3000'],
     optionsSuccessStatus: 200,
     credentials: true,
+    methods: ['get','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
+//     allowedHeaders: [
+//         "Content-Type",
+//         "Authorization",
+//         "Access-Control-Allow-Origin",
+//       ],
 }
 app.use(cors(corsOptions));
+// app.enable('trust proxy')
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.json({ limit: "50mb" }));
 
 // Routes
 app.use(authRoute)

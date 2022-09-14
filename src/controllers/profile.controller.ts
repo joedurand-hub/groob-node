@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import User from '../models/User'
 import Publication from '../models/Publication'
 import fs from "fs-extra"
@@ -9,8 +9,6 @@ import { UpdateProfileBodyType, ValidateProfileParamsType } from "../schemas/pro
 
 
 
-
-// import {io} from "../app"
 
 export const getProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
@@ -77,7 +75,7 @@ export const getProfileById = async (
         const profileData = await User.findById(id, { password: 0 })
 
         const myId = req.userId?.toString()
-        if(profileData !== undefined) {
+        if (profileData !== undefined) {
             profileData.visits = profileData.visits.concat(myId)
         }
         await profileData.save()
@@ -97,19 +95,10 @@ export const updateProfile = async (
         const { userName, description, age, firstName, lastName, explicitContent } = req.body;
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
-        if (req.file) {
-            const result = await uploadImage({ filePath: req.file.path })
-            user.profilePicture = {
-                public_id: result.public_id,
-                secure_url: result.secure_url,
-            }
-            await fs.unlink(req.file.path)
-        }
-        await user.save()
-        await User.findOneAndUpdate(
+        const userUpdated = await User.findOneAndUpdate(
             { _id: user._id },
             { userName, description, age, firstName, lastName, explicitContent })
-        res.status(200).json("User updated!");
+        res.status(200).json({ message: "User updated!", userUpdated });
         return closeConnectionInMongoose
     } catch (error) {
         console.log("Error:", error)
@@ -117,23 +106,55 @@ export const updateProfile = async (
     }
 }
 
+
+export const pictureProfile = async (
+    req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>,
+    res: Response) => {
+    try {
+        const { id } = req.params
+        const user = await User.findById(id, { password: 0 })
+        if (req.files) {
+            const files = req.files['image']
+            if (files) {
+                for (const file of files) {
+                    const result = await uploadImage({ filePath: file.path })
+                    user.profilePicture = {
+                        public_id: result.public_id,
+                        secure_url: result.secure_url,
+                    }
+                    await user.save()
+                    await fs.unlink(file.path)
+                }
+            }
+        }
+        await user.save()
+        const pictureUpdated = user.profilePicture
+        res.status(200).json({ pictureUpdated });
+        return closeConnectionInMongoose
+    } catch (error) {
+        console.log("Error:", error)
+        res.status(500).json(error)
+    }
+}
+
+
 export const deleteProfile = async (
     req: Request<ValidateProfileParamsType, unknown, unknown>,
     res: Response) => {
     try {
         const { id } = req.params;
-        const myUser = await User.findById({_id: id})
+        const myUser = await User.findById({ _id: id })
         console.log(myUser)
         const allPostsToDelete = myUser.publications.map(id => id)
-        
+
         const allPosts = await Publication.find({
             _id: {
                 $in: allPostsToDelete
             }
         })
-        const postsDeleted = await Publication.deleteMany({_id: allPosts})
-        const userDeleted = await User.deleteOne({myUser})
-        res.status(200).json({message: `User and posts deleted`, postsDeleted, userDeleted})
+        const postsDeleted = await Publication.deleteMany({ _id: allPosts })
+        const userDeleted = await User.deleteOne({ myUser })
+        res.status(200).json({ message: `User and posts deleted`, postsDeleted, userDeleted })
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)
@@ -153,7 +174,11 @@ export const getAllPostsByUser = async (req: Request, res: Response) => {
                 return post;
             }
         })
-        res.status(200).json(postsByUser)
+        const data = postsByUser.sort((a: any, b: any) => {
+            if (a.createdAt < b.createdAt) return 1;
+            return -1;
+        })
+        res.status(200).json(data)
         return closeConnectionInMongoose
     } catch (error) {
         console.log(error)

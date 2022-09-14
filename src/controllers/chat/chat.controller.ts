@@ -66,6 +66,7 @@ export const userChats = async (req: Request, res: Response) => {
                 userName: user.userName,
                 profilePicture: user.profilePicture.secure_url,
                 online: user.online,
+                updatedAt: user.updatedAt,
             }
         })
 

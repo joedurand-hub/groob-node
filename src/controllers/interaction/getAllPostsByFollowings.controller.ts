@@ -26,28 +26,36 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
             }
         })
 
+        // No implementado
         let usersByPosts = await User.find({
             user: {
                 $in: allMyIds
             }
         }, { password: 0, followers: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
-        
-        console.log(postsByFollowings)
-        console.log(usersByPosts)
+        console.log(usersByPosts) // obtengo cada usuario que sigo
+        // Implementar en unir cada post con los datos del usuario correspondiente
 
-        if(myUser.explicitContent === true) {
-            const data = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
+        if (myUser.explicitContent === true) {
+            const allPosts = postsByMyUser.concat(postsByFollowings) // concateno los usuarios y los posts
+            const data = allPosts.sort((a: any, b: any) => {
+                if (a.createdAt < b.createdAt) return 1;
+                return -1;
+            })
             res.status(200).json(data)
         } else {
             const postWithOutExplicitContent = postsByFollowings.filter(post => post.explicitContent === false)
-            const data = postsByMyUser.concat(postWithOutExplicitContent) // concateno los usuarios y los posts
-            res.status(200).json({data, myId: myUser?._id})
+            const allPosts = postsByMyUser.concat(postWithOutExplicitContent) // concateno los usuarios y los posts
+            const data = allPosts.sort((a: any, b: any) => {
+                if (a.createdAt < b.createdAt) return 1;
+                return -1;
+            })
+            res.status(200).json({ data, myId: myUser?._id })
 
         }
         closeConnectionInMongoose
     } catch (error) {
         console.log(error)
-        res.status(400).json(error) 
+        res.status(400).json(error)
     }
 }
 

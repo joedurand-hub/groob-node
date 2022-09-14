@@ -28,7 +28,11 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 })
                 user.online = true
                 await user.save()
-                res.cookie('authToken', token)
+                res.cookie('authToken', token, {
+                    secure: true,
+                    httpOnly: true,
+                    sameSite: "none",
+                })
                 res.status(200).json({ message: 'Success' })
             }
             return closeConnectionInMongoose;

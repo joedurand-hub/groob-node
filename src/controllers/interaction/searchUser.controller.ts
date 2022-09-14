@@ -6,7 +6,7 @@ export const searchUser = async (req: Request, res: Response) => {
     try {
         const { userName } = req.query
         if (userName === undefined || userName === null) {
-            return console.log("No hay data maestro");
+            return console.log("No hay data maestro, mostra otra cosa");
         }
         let data = await User.find()
         const result = data.filter(user => {
