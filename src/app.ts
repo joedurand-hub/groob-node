@@ -44,7 +44,7 @@ var corsOptions = {
     origin: ['https://groob.vercel.app', 'http://localhost:3000'],
     optionsSuccessStatus: 200,
     credentials: true,
-    methods: ['get','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
 //     allowedHeaders: [
 //         "Content-Type",
 //         "Authorization",

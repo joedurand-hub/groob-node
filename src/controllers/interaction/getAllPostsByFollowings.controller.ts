@@ -32,7 +32,7 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
                 $in: allMyIds
             }
         }, { password: 0, followers: 0, firstName: 0, lastName: 0, birthday: 0, createdAt: 0, updatedAt: 0, email: 0 })
-        console.log(usersByPosts) // obtengo cada usuario que sigo
+        // console.log(usersByPosts) // obtengo cada usuario que sigo
         // Implementar en unir cada post con los datos del usuario correspondiente
 
         if (myUser.explicitContent === true) {
@@ -41,7 +41,7 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
                 if (a.createdAt < b.createdAt) return 1;
                 return -1;
             })
-            res.status(200).json(data)
+            res.status(200).json({ data, myId: myUser?._id })
         } else {
             const postWithOutExplicitContent = postsByFollowings.filter(post => post.explicitContent === false)
             const allPosts = postsByMyUser.concat(postWithOutExplicitContent) // concateno los usuarios y los posts

@@ -113,23 +113,26 @@ export const pictureProfile = async (
     try {
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
+        let obj = {}
         if (req.files) {
             const files = req.files['image']
             if (files) {
                 for (const file of files) {
                     const result = await uploadImage({ filePath: file.path })
-                    user.profilePicture = {
+                    obj = {
                         public_id: result.public_id,
                         secure_url: result.secure_url,
                     }
-                    await user.save()
                     await fs.unlink(file.path)
                 }
             }
         }
-        await user.save()
-        const pictureUpdated = user.profilePicture
-        res.status(200).json({ pictureUpdated });
+        if(user !== undefined) {
+            user.profilePicture = obj
+            const userUpdated = await user.save()
+            const pictureUpdated = userUpdated.profilePicture
+            res.status(200).json({ pictureUpdated });
+        }
         return closeConnectionInMongoose
     } catch (error) {
         console.log("Error:", error)
