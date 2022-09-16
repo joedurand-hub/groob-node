@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import User from '../../models/User'
-
+import { closeConnectionInMongoose } from "../../libs/constants";
 
 export const searchUser = async (req: Request, res: Response) => {
     try {
         const { input } = req.query
-        if (input === undefined || input === null) {
-            return console.log("No hay data maestro, mostra otra cosa");
-        }
-        let data = await User.find()
+        console.log(input)
+        if (input === undefined || input === null || input === "") return
+        else {
+            let data = await User.find()
         const result = data.filter(user => {
             if(user.userName.toLowerCase().includes(input)
             || user.description.toLowerCase().includes(input)
@@ -19,8 +19,9 @@ export const searchUser = async (req: Request, res: Response) => {
                 return user
             }
         })
-        console.log(result)
         return res.status(200).json(result)
+    }
+    return closeConnectionInMongoose;
     } catch (error) {
         console.log(error)
     }
