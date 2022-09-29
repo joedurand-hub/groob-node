@@ -55,7 +55,13 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            res.cookie('authToken', token)
+            res.cookie('authToken', token, {
+                maxAge: 604800,
+                httpOnly: true, // Para consumir sólo en protocolo
+                secure: true, // Conexión segura https
+                sameSite: true, // No se enviará en peticiones cross-site, evita ataques CSRF
+                domain: '.groob.com.ar'
+            })
             res.status(200).json({ message: 'Success' })
             await user.save()
             return closeConnectionInMongoose;
