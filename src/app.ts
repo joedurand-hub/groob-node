@@ -23,10 +23,21 @@ const server = http.createServer(app)
 
 let io = new SocketServer(server, {
     cors: {
-        origin: ['https://groob.vercel.app', 'http://localhost:3000'],
+        origin: ['https://groob.vercel.app', 'http://groob.com.ar', 
+        'http://www.groob.com.ar', 'https://groob.com.ar', 'https://www.groob.com.ar', 
+        'http://localhost:3000'],
         optionsSuccessStatus: 200,
         credentials: true,
-        methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+        methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
+        allowedHeaders: [
+            'Origin',
+            'X-Requested-With',
+            'Content-Type',
+            'Access-Control-Allow-Origin',
+            'Accept',
+            'X-Access-Token',
+            'AuthToken'
+          ],
     }
 })
 
@@ -37,22 +48,24 @@ app.use(errorHandler);
 app.set('port', process.env.PORT || 8080)
 
 // Middlewares
-app.use(cookieParser())
 app.use(morgan('dev'))
-
 var corsOptions = {
-    origin: ['https://groob.vercel.app', 'http://localhost:3000'],
-    optionsSuccessStatus: 200,
+    origin: 'https://www.groob.com.ar',
     credentials: true,
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
-//     allowedHeaders: [
-//         "Content-Type",
-//         "Authorization",
-//         "Access-Control-Allow-Origin",
-//       ],
+    allowedHeaders: [
+        'Origin',
+        'X-Requested-With',
+        'Content-Type',
+        'Access-Control-Allow-Origin',
+        'Accept',
+        'X-Access-Token',
+        'AuthToken'
+    ],
 }
 app.use(cors(corsOptions));
-// app.enable('trust proxy')
+app.use(cookieParser())
+app.enable('trust proxy')
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 

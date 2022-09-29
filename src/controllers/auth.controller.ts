@@ -28,7 +28,10 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 })
                 user.online = true
                 await user.save()
-                res.cookie('authToken', token)
+                res.cookie('authToken', token, {
+                    httpOnly: true, 
+                    secure: true,
+                })
                 res.status(200).json({ message: 'Success' })
             }
             return closeConnectionInMongoose;
@@ -50,7 +53,12 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            res.cookie('authToken', token)
+            res.cookie('authToken', token, {
+                maxAge: 900000,
+                httpOnly: true, // Para consumir sólo en protocolo
+                secure: true, // Conexión segura https
+                sameSite: 'none', // No se enviará en peticiones cross-site, evita ataques CSRF
+            })
             res.status(200).json({ message: 'Success' })
             await user.save()
             return closeConnectionInMongoose;
@@ -63,7 +71,12 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            res.cookie('authToken', token)
+            res.cookie('authToken', token, {
+                maxAge: 604800,
+                httpOnly: true, // Para consumir sólo en protocolo
+                secure: true, // Conexión segura https
+                sameSite: true, // No se enviará en peticiones cross-site, evita ataques CSRF
+            })
             res.status(200).json({ message: 'Success' })
             await user.save()
             return closeConnectionInMongoose;

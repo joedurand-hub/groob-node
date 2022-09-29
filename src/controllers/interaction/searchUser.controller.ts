@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import User from '../../models/User'
-import { closeConnectionInMongoose } from "../../libs/constants";
 
 export const searchUser = async (req: Request, res: Response) => {
     try {
@@ -21,7 +20,6 @@ export const searchUser = async (req: Request, res: Response) => {
         })
         return res.status(200).json(result)
     }
-    return closeConnectionInMongoose;
     } catch (error) {
         console.log(error)
     }
