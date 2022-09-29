@@ -12,16 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-(() => __awaiter(void 0, void 0, void 0, function* () {
+exports.searchUser = void 0;
+const User_1 = __importDefault(require("../../models/User"));
+const searchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.p7kqs.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true`;
-        yield mongoose_1.default.connect(URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const { input } = req.query;
+        console.log(input);
+        if (input === undefined || input === null || input === "")
+            return;
+        else {
+            let data = yield User_1.default.find();
+            const result = data.filter(user => {
+                if (user.userName.toLowerCase().includes(input)
+                    || user.description.toLowerCase().includes(input)
+                    || user.firstName.toLowerCase().includes(input)
+                    || user.lastName.toLowerCase().includes(input)
+                    || user.email.toLowerCase().includes(input)) {
+                    return user;
+                }
+            });
+            return res.status(200).json(result);
+        }
     }
     catch (error) {
         console.log(error);
     }
-}))();
+});
+exports.searchUser = searchUser;

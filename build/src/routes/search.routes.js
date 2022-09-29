@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const searchUser_controller_1 = require("../controllers/interaction/searchUser.controller");
+const discoverUsers_1 = require("./../controllers/interaction/discoverUsers");
+const tokenValidator_1 = require("../libs/tokenValidator");
+const router = (0, express_1.Router)();
+router.get('/search', tokenValidator_1.TokenValidator, searchUser_controller_1.searchUser);
+router.get('/discover', tokenValidator_1.TokenValidator, discoverUsers_1.discoverUsers);
+exports.default = router;

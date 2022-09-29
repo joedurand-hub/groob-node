@@ -7,6 +7,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app_1 = __importDefault(require("./app"));
 require("./database");
-app_1.default.listen(app_1.default.get('port'), () => {
-    console.log(`Server on port ${app_1.default.get('port')} my friend`);
+app_1.default.listen(8080, () => {
+    console.log(`app on port 8080`);
 });
