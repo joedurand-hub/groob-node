@@ -29,8 +29,10 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 user.online = true
                 await user.save()
                 res.cookie('authToken', token, {
-                    httpOnly: true, 
-                    secure: true,
+                    maxAge: 900000,
+                    httpOnly: true, // Para consumir sólo en protocolo
+                    secure: true, // Conexión segura https
+                    sameSite: 'none', // No se enviará en peticiones cross-site, evita ataques CSRF
                 })
                 res.status(200).json({ message: 'Success' })
             }

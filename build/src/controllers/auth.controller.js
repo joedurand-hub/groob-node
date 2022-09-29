@@ -40,8 +40,10 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 user.online = true;
                 yield user.save();
                 res.cookie('authToken', token, {
+                    maxAge: 900000,
                     httpOnly: true,
                     secure: true,
+                    sameSite: 'none', // No se enviará en peticiones cross-site, evita ataques CSRF
                 });
                 res.status(200).json({ message: 'Success' });
             }
