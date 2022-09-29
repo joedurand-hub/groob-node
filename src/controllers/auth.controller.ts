@@ -57,10 +57,9 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             })
             res.cookie('authToken', token, {
                 maxAge: 604800,
-                httpOnly: true, // Para consumir sólo en protocolo
-                secure: true, // Conexión segura https
-                sameSite: true, // No se enviará en peticiones cross-site, evita ataques CSRF
-                domain: '.groob.com.ar'
+                httpOnly: false, // Para consumir sólo en protocolo
+                secure: false, // Conexión segura https
+                sameSite: 'none', // No se enviará en peticiones cross-site, evita ataques CSRF
             })
             res.status(200).json({ message: 'Success' })
             await user.save()
