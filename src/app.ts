@@ -50,7 +50,7 @@ app.set('port', process.env.PORT || 8080)
 // Middlewares
 app.use(morgan('dev'))
 var corsOptions = {
-    origin: ['https://www.groob.com.ar', 'https://groob.vercel.app'],
+    origin: ['https://www.groob.com.ar', 'https://groob.com.ar', 'https://groob.vercel.app', 'https://www.groob.online', 'https://www.groob.store','http://localhost:3000',],
     credentials: true,
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
     allowedHeaders: [
