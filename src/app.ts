@@ -1,6 +1,7 @@
 import express, { NextFunction } from "express"
 import path from 'path'
 import http from "http"
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser"
 import morgan from 'morgan'
 import cors from 'cors'

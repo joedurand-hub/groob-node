@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import {serialize} from "cookie"
 import User from "../models/User";
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv";
 import { LoginBodyType, SignupBodyType } from "../schemas/auth..schema";
 
 const closeConnectionInMongoose = mongoose.connection.close();
@@ -52,14 +53,14 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const passwordFromLogin = await user.validatePassword(password)
             if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
             user.online = true
-            const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
+            const token: string = jwt.sign({ _id: user._id }, `p1!oox2i3%u9284y3$ghs90CSwioFXef801X34y5t6r7e8w9q0`, {
                 expiresIn: 604800
             })
             res.setHeader('Set-cookie', serialize("authtoken", token, {
                 maxAge: 604800,
-                httpOnly: false, 
+                httpOnly: true, 
                 sameSite: 'none',
-                secure: false,
+                secure: true,
             }))
             res.status(200).json({ message: 'Success', token: token })
             await user.save()
