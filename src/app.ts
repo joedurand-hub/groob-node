@@ -32,6 +32,7 @@ let io = new SocketServer(server, {
         methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
         allowedHeaders: [
             'Origin',
+            'Access-Control-Allow-Credentials',
             'X-Requested-With',
             'Content-Type',
             'Access-Control-Allow-Origin',
@@ -51,8 +52,8 @@ app.set('port', process.env.PORT || 8080)
 app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
-    origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://www.groob.online', 
-    'https://www.groob.store','http://localhost:3000', 'https://www.groob.com.ar'],
+    origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 
+    'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000',],
     credentials: true,
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
     allowedHeaders: [
@@ -60,7 +61,8 @@ var corsOptions = {
         'X-Requested-With',
         'Content-Type',
         'Access-Control-Allow-Origin',
-        "Access-Control-Allow-Headers",
+        'Access-Control-Allow-Headers',
+        'Access-Control-Allow-Credentials',
         'Accept',
         'X-Access-Token',
         'authtoken'
