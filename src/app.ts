@@ -48,9 +48,10 @@ app.use(errorHandler);
 app.set('port', process.env.PORT || 8080)
 
 // Middlewares
+app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
-    origin: ['https://www.groob.com.ar', 'https://groob.com.ar', 'https://groob.vercel.app', 'https://www.groob.online', 'https://www.groob.store','http://localhost:3000',],
+    origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://www.groob.online', 'https://www.groob.store','http://localhost:3000', 'https://www.groob.com.ar'],
     credentials: true,
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
     allowedHeaders: [
@@ -64,7 +65,7 @@ var corsOptions = {
     ],
 }
 app.use(cors(corsOptions));
-app.use(cookieParser())
+app.set("trust proxy", 1)
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 
