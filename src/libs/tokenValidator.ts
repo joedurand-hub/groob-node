@@ -8,7 +8,7 @@ interface PayloadI {
 }
 
 export const TokenValidator = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.header('authToken')
+    const token = req.header('authtoken')
     if(!token) return res.status(401).json({
         error: "acceso denegado",
         auth: false,

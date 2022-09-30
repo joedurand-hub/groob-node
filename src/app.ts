@@ -36,7 +36,7 @@ let io = new SocketServer(server, {
             'Access-Control-Allow-Origin',
             'Accept',
             'X-Access-Token',
-            'AuthToken'
+            'authtoken'
           ],
     }
 })
@@ -46,12 +46,12 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
 app.use(errorHandler);
 // Settings
 app.set('port', process.env.PORT || 8080)
-
 // Middlewares
 app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
-    origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://www.groob.online', 'https://www.groob.store','http://localhost:3000', 'https://www.groob.com.ar'],
+    origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://www.groob.online', 
+    'https://www.groob.store','http://localhost:3000', 'https://www.groob.com.ar'],
     credentials: true,
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
     allowedHeaders: [
@@ -61,7 +61,7 @@ var corsOptions = {
         'Access-Control-Allow-Origin',
         'Accept',
         'X-Access-Token',
-        'AuthToken'
+        'authtoken'
     ],
 }
 app.use(cors(corsOptions));

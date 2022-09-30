@@ -28,7 +28,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 })
                 user.online = true
                 await user.save()
-                res.cookie('authToken', token, {
+                res.cookie('authtoken', token, {
                     maxAge: 604800,
                     httpOnly: true, // Para consumir sólo en protocolo HTTP
                     sameSite: 'none',
@@ -55,7 +55,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            res.cookie('authToken', token, {
+            res.cookie('authtoken', token, {
                 maxAge: 604800,
                 httpOnly: true, // Para consumir sólo en protocolo HTTP
                 sameSite: 'none',
@@ -73,9 +73,9 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            res.cookie('authToken', token, {
+            res.cookie('authtoken', token, {
                 maxAge: 604800,
-                httpOnly: true, // Para consumir sólo en protocolo HTTP
+                httpOnly: true, 
                 sameSite: 'none',
                 secure: true,
             })
@@ -96,7 +96,7 @@ export const logout = async (req: Request, res: Response) => {
         const user = await User.findById(req.userId)
         user.online = false
         await user.save()
-        res.clearCookie('authToken');
+        res.clearCookie('authtoken');
         res.send('Cookie deleted');
     } catch (error) {
         console.log(error)
