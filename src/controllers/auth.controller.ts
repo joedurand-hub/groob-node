@@ -61,9 +61,8 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
                 sameSite: 'none',
                 secure: false,
             }))
-            res.status(200).json({ message: 'Success' })
+            res.status(200).json({ message: 'Success', token: token })
             await user.save()
-            return closeConnectionInMongoose;
         }
         if (userName !== undefined && userName.length > 0 && password.length > 0) {
             const user = await User.findOne({ userName })
