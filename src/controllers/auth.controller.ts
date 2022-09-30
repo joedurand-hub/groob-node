@@ -36,7 +36,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                     sameSite: 'none',
                     secure: true,
                 })
-                res.status(200).json({ message: 'Success' })
+                res.status(200).json({ message: 'Success', token: token })
             }
         }
     } catch (error) {
