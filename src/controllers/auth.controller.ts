@@ -57,9 +57,9 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             })
             res.setHeader('Set-cookie', serialize("authtoken", token, {
                 maxAge: 604800,
-                httpOnly: true, 
+                httpOnly: false, 
                 sameSite: 'none',
-                secure: true,
+                secure: false,
             }))
             res.status(200).json({ message: 'Success' })
             await user.save()
