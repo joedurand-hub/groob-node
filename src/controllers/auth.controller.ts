@@ -53,7 +53,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const passwordFromLogin = await user.validatePassword(password)
             if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
             user.online = true
-            const token: string = jwt.sign({ _id: user._id }, `p1!oox2i3%u9284y3$ghs90CSwioFXef801X34y5t6r7e8w9q0`, {
+            const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
             res.setHeader('Set-cookie', serialize("authtoken", token, {
