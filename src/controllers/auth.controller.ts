@@ -31,6 +31,8 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 res.cookie('authToken', token, {
                     maxAge: 604800,
                     httpOnly: true, // Para consumir sólo en protocolo HTTP
+                    sameSite: 'none',
+                    secure: true,
                 })
                 res.status(200).json({ message: 'Success' })
             }
@@ -56,6 +58,8 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             res.cookie('authToken', token, {
                 maxAge: 604800,
                 httpOnly: true, // Para consumir sólo en protocolo HTTP
+                sameSite: 'none',
+                secure: true,
             })
             res.status(200).json({ message: 'Success' })
             await user.save()
@@ -71,7 +75,9 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             })
             res.cookie('authToken', token, {
                 maxAge: 604800,
-                httpOnly: true, // Para consumir sólo en protocolo
+                httpOnly: true, // Para consumir sólo en protocolo HTTP
+                sameSite: 'none',
+                secure: true,
             })
             res.status(200).json({ message: 'Success' })
             await user.save()
