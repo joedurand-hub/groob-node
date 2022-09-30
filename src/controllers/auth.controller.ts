@@ -37,7 +37,6 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 })
                 res.status(200).json({ message: 'Success' })
             }
-            return closeConnectionInMongoose;
         }
     } catch (error) {
         console.log("error:", error)
@@ -59,7 +58,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             res.setHeader('Set-cookie', serialize("authtoken", token, {
                 maxAge: 604800,
                 httpOnly: true, 
-                sameSite: 'none',
+                sameSite: 'lax',
                 secure: true,
             }))
             res.status(200).json({ message: 'Success' })
