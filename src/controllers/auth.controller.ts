@@ -82,10 +82,8 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             })
             res.status(200).json({ message: 'Success' })
             await user.save()
-            return closeConnectionInMongoose;
         }
 
-        return closeConnectionInMongoose;
     } catch (error) {
         console.log("error:", error)
         res.status(400).json(error)
