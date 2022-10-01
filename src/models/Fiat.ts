@@ -1,17 +1,17 @@
 import { Schema, model } from 'mongoose'
 
 const fiatSchema = new Schema({
-    entidad: {
-        type: String, required: true, trim: true
+    entity: {
+        type: String, required: true, trim: true, default: "Banco - Entidad"
     },
     CBU: {
-        type: Number, required: false, trim: true, default: 0,
+        type: String, required: false, trim: true, default: "0000000000000000000000",
     },
     CVU: { 
-        type: Number, required: false, trim: true, default: 0,
+        type: String, required: false, trim: true, default: "0000000000000000000000",
     },
     alias: {
-        type: String, required: true, trim: true, default: 0,
+        type: String, required: true, trim: true, default: "gato.perro.loro",
     },
     createdAt: {
         type: Date,

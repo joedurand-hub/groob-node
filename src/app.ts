@@ -12,6 +12,7 @@ import searchRoute from './routes/search.routes'
 import followRoute from './routes/follow.routes'
 import chatRoute from './routes/chat.routes'
 import messagesRoute from './routes/messages.routes'
+import walletsRoute from './routes/wallets.routes'
 import { Server as SocketServer } from "socket.io"
 import type { ErrorRequestHandler } from "express";
 
@@ -69,7 +70,7 @@ var corsOptions = {
     ],
 }
 app.use(cors(corsOptions));
-app.set("trust proxy", 1)
+// app.set("trust proxy", 1)
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 
@@ -81,6 +82,7 @@ app.use(searchRoute)
 app.use(followRoute)
 app.use(chatRoute)
 app.use(messagesRoute)
+app.use(walletsRoute)
 
 // Static files
 app.use('/uploads', express.static(path.resolve('uploads')));

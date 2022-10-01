@@ -3,27 +3,26 @@ import { Request, Response } from "express";
 import User from "../../models/User"
 import Crypto from "../../models/Crypto"
 
-export const createFiatWallet = async (req: Request, res: Response) => {
+export const createCryptoWallet = async (req: Request, res: Response) => {
     try {
+        const { entity, CBU, CVU, alias } = req.body
+        const userCBU = parseInt(CBU)
+        const userCVU = parseInt(CVU)
+        console.log(entity, userCBU, userCVU, alias)
+
         const user = await User.findById(req.userId)
-        const chat = await Crypto.findOne({
-            members: { $all: [req.userId, req.body.recivedId] }
-        })
 
-        if (chat !== undefined && chat !== null) {
-            res.status(200).json({ message: "el chat ya existe boludín:", chat })
-            return closeConnectionInMongoose
-        }
+        const newFiat = new Crypto({ entity, CBU, CVU, alias })
+        console.log(newFiat)
 
-        else {
-            const newChat = new Crypto({ members: [req.body.senderId, req.body.recivedId] })
-            const result = await newChat.save()
-            const chatId = result?._id
-            if (user != undefined) user.chats = user.chats.concat(chatId)
-            await user.save()
-            res.status(200).json(result)
-            return closeConnectionInMongoose
+        const result = await newFiat.save()
+        const FiatId = result?._id
+        if (user != undefined) {
+            user.fiatWallets = user.fiatWallets.concat(FiatId)
         }
+        await user.save()
+        res.status(200).json(result)
+        return closeConnectionInMongoose
 
     } catch (error) {
         console.error(error)
@@ -31,22 +30,24 @@ export const createFiatWallet = async (req: Request, res: Response) => {
     }
 }
 
-export const getProfileById = async (
+export const getCryptoWallet = async (
     req: Request<unknown, unknown, unknown>,
     res: Response) => {
     try {
         const profileData = await User.findById(req.userId, { password: 0 })
 
-        const myId = req.userId?.toString()
-        if (profileData !== undefined) {
-            profileData.visits = profileData.visits.concat(myId)
-        }
-        await profileData.save()
+        const allWalletsFiat = profileData?.fiatWallets
 
-        res.status(200).json({ profileData, myId })
+        const wallets = await Crypto.find({
+            _id: {
+                $in: allWalletsFiat
+            }
+        })
+
+        res.status(200).json(wallets)
         return closeConnectionInMongoose
     } catch (error) {
-        console.log("Cannot get profile", error)
+        console.log("error:", error)
         return res.status(404).json(error)
     }
 }

@@ -5,25 +5,18 @@ import Fiat from "../../models/Fiat"
 
 export const createFiatWallet = async (req: Request, res: Response) => {
     try {
+        const { entity, CBU, CVU, alias } = req.body
+
         const user = await User.findById(req.userId)
-        const wallet = await Fiat.findOne({
-            members: { $all: [req.userId, req.body.recivedId] }
-        })
-
-        if (wallet !== undefined && wallet !== null) {
-            res.status(200).json({ message: "la Wallet ya existe boludín:", wallet })
-            return closeConnectionInMongoose
+        const newFiat = new Fiat({ entity, CBU, CVU, alias })
+        const result = await newFiat.save()
+        const FiatId = result?._id
+        if (user != undefined) {
+            user.fiatWallets = user.fiatWallets.concat(FiatId)
         }
-
-        else {
-            const newFiat = new Fiat({ members: [req.body.senderId, req.body.recivedId] })
-            const result = await newFiat.save()
-            const FiatId = result?._id
-            if (user != undefined) user.Fiats = user.Fiats.concat(FiatId)
-            await user.save()
-            res.status(200).json(result)
-            return closeConnectionInMongoose
-        }
+        await user.save()
+        res.status(200).json(result)
+        return closeConnectionInMongoose
 
     } catch (error) {
         console.error(error)
@@ -36,25 +29,30 @@ export const getFiatWallet = async (
     res: Response) => {
     try {
         const profileData = await User.findById(req.userId, { password: 0 })
-
-        const myId = req.userId?.toString()
-        if (profileData !== undefined) {
-            profileData.visits = profileData.visits.concat(myId)
-        }
-        await profileData.save()
-
-        res.status(200).json({ profileData, myId })
+        const allWalletsFiat = profileData?.fiatWallets
+        const wallets = await Fiat.find({
+            _id: {
+                $in: allWalletsFiat
+            }
+        })
+        res.status(200).json(wallets)
         return closeConnectionInMongoose
     } catch (error) {
-        console.log("Cannot get profile", error)
+        console.log("error:", error)
         return res.status(404).json(error)
     }
 }
 
-export const updateFiatWallet = async (
-    req: Request<unknown, unknown, unknown>,
-    res: Response) => {
+export const updateFiatWallet = async (req: Request, res: Response) => {
     try {
+        const { entity, CBU, CVU, alias } = req.body;
+        const { id } = req.params
+        const wallet = await Fiat.findById(id, { password: 0 })
+        await Fiat.findByIdAndUpdate(
+            { _id: wallet._id },
+            { entity, CBU, CVU, alias })
+        res.status(200).json({ message: "Wallet updated!" });
+        return closeConnectionInMongoose
     } catch (error) {
         console.log("Error:", error)
         res.status(500).json(error)
