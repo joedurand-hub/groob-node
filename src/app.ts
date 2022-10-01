@@ -25,22 +25,22 @@ const server = http.createServer(app)
 
 let io = new SocketServer(server, {
     cors: {
-        origin: ['https://groob.vercel.app', 'http://groob.com.ar', 
-        'http://www.groob.com.ar', 'https://groob.com.ar', 'https://www.groob.com.ar', 
-        'http://localhost:3000'],
+        origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 
+        'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
         optionsSuccessStatus: 200,
-        credentials: true,
-        methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
-        allowedHeaders: [
-            'Origin',
-            'Access-Control-Allow-Credentials',
-            'X-Requested-With',
-            'Content-Type',
-            'Access-Control-Allow-Origin',
-            'Accept',
-            'X-Access-Token',
-            'authtoken'
-          ],
+        // credentials: true,
+        // methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
+        // allowedHeaders: [
+        //     'Origin',
+        //     'X-Requested-With',
+        //     'Content-Type',
+        //     'Access-Control-Allow-Origin',
+        //     'Access-Control-Allow-Headers',
+        //     'Access-Control-Allow-Credentials',
+        //     'Accept',
+        //     'X-Access-Token',
+        //     'authtoken'
+        //   ],
     }
 })
 
@@ -54,9 +54,9 @@ app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
     origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 
-    'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000',],
+    'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
     credentials: true,
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH', 'OPTIONS'],
+    methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
     allowedHeaders: [
         'Origin',
         'X-Requested-With',
@@ -70,7 +70,7 @@ var corsOptions = {
     ],
 }
 app.use(cors(corsOptions));
-// app.set("trust proxy", 1)
+app.set("trust proxy", 1)
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 
