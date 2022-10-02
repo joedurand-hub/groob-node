@@ -61,9 +61,10 @@ var corsOptions = {
         'Origin',
         'X-Requested-With',
         'Content-Type',
+        "Authorization",
         'Accept',
         'Access-Control-Allow-Origin',
-        'Access-Control-Allow-Headers',
+        // 'Access-Control-Allow-Headers',
         'X-Access-Token',
         'authtoken'
     ],
