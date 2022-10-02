@@ -29,7 +29,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 user.online = true
                 await user.save()
                 res.cookie('authtoken', token, {
-                    maxAge: 9000000,
+                    maxAge: 1815000000, //21 days
                     httpOnly: true, // Para consumir sólo en protocolo HTTP
                     sameSite: 'none',
                     secure: true,
@@ -55,10 +55,10 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
                 expiresIn: 604800
             })
             res.setHeader('Set-cookie', serialize("authtoken", token, {
-                maxAge: 9000000,
-                httpOnly: true, 
+                maxAge: 1815000000, //21 days
+                httpOnly: false, 
                 sameSite: 'none',
-                secure: true,
+                secure: false,
             }))
             res.status(200).json({ message: 'Success', token: token })
             await user.save()
@@ -72,7 +72,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
                 expiresIn: 604800
             })
             res.cookie('authtoken', token, {
-                maxAge: 9000000,
+                maxAge: 1815000000, //21 days
                 httpOnly: true, 
                 sameSite: 'none',
                 secure: true,
