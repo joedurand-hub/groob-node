@@ -11,11 +11,11 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
         const { userName, password, email } = req.body
         const userNameExist = await User.findOne({ userName })
         if (userNameExist) {
-            return res.json("The username is already in use.")
+            return res.json({ message: "The username is already in use."})
         }
         const emailExist = await User.findOne({ email })
         if (emailExist) {
-            return res.json("The email is already in use.")
+            return res.json({ message: "The email is already in use."})
         }
         else {
             if(password.length >= 6 && password.length < 16) {
@@ -28,12 +28,12 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 })
                 user.online = true
                 await user.save()
-                // res.cookie('authtoken', token, {
-                //     maxAge: 9000000,
-                //     httpOnly: true, // Para consumir sólo en protocolo HTTP
-                //     sameSite: 'none',
-                //     secure: true,
-                // })
+                res.cookie('authtoken', token, {
+                    maxAge: 9000000,
+                    httpOnly: true, // Para consumir sólo en protocolo HTTP
+                    sameSite: 'none',
+                    secure: true,
+                })
                 res.status(200).json({ message: 'Success', token: token })
             }
         }
@@ -54,12 +54,12 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            // res.setHeader('Set-cookie', serialize("authtoken", token, {
-            //     maxAge: 9000000,
-            //     httpOnly: true, 
-            //     sameSite: 'none',
-            //     secure: true,
-            // }))
+            res.setHeader('Set-cookie', serialize("authtoken", token, {
+                maxAge: 9000000,
+                httpOnly: true, 
+                sameSite: 'none',
+                secure: true,
+            }))
             res.status(200).json({ message: 'Success', token: token })
             await user.save()
         }
@@ -71,12 +71,12 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
                 expiresIn: 604800
             })
-            // res.cookie('authtoken', token, {
-            //     maxAge: 9000000,
-            //     httpOnly: true, 
-            //     sameSite: 'none',
-            //     secure: true,
-            // })
+            res.cookie('authtoken', token, {
+                maxAge: 9000000,
+                httpOnly: true, 
+                sameSite: 'none',
+                secure: true,
+            })
             res.status(200).json({ message: 'Success', token: token })
             await user.save()
         }
