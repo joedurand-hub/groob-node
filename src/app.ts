@@ -54,20 +54,19 @@ app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
     origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 'http://localhost:3000'],
-    credentials: true,
-    optionsSuccessStatus: 200,
-    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS'],
-    allowedHeaders: [
-        'Origin',
-        'X-Requested-With',
-        'Content-Type',
-        "Authorization",
-        'Accept',
-        'Access-Control-Allow-Origin',
-        // 'Access-Control-Allow-Headers',
-        'X-Access-Token',
-        'authtoken'
-    ],
+   credentials: true,
+        methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
+        allowedHeaders: [
+            'Origin',
+            'X-Requested-With',
+            'Content-Type',
+            'Access-Control-Allow-Origin',
+            'Access-Control-Allow-Headers',
+            'Access-Control-Allow-Credentials',
+            'Accept',
+            'X-Access-Token',
+            'authtoken'
+          ],
 }
 app.use(cors(corsOptions));
 app.set("trust proxy", 1)
