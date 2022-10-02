@@ -56,14 +56,15 @@ var corsOptions = {
     origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 
     'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
     credentials: true,
+    optionsSuccessStatus: 200,
     methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
     allowedHeaders: [
         'Origin',
         'X-Requested-With',
         'Content-Type',
-        // 'Access-Control-Allow-Origin',
-        // 'Access-Control-Allow-Headers',
-        // 'Access-Control-Allow-Credentials',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Headers',
+        'Access-Control-Allow-Credentials',
         'Accept',
         'X-Access-Token',
         'authtoken'
