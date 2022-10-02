@@ -24,7 +24,7 @@ export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res
                 user.profilePicture.secure_url = "https://res.cloudinary.com/groob/image/upload/v1661108370/istoremovebg-preview_hzebg1.png"
                 const userSaved = await user.save()
                 const token: string = jwt.sign({ _id: userSaved._id }, `${process.env.TOKEN_KEY_JWT}`, {
-                    expiresIn: 1204800
+                    expiresIn: 1815000000
                 })
                 user.online = true
                 await user.save()
@@ -52,7 +52,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
             user.online = true
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
-                expiresIn: 604800
+                expiresIn: 1815000000
             })
             res.setHeader('Set-cookie', serialize("authtoken", token, {
                 maxAge: 1815000000, //21 days
@@ -69,7 +69,7 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
             if (!passwordFromLogin) return res.status(400).json('Email or password is wrong')
             user.online = true
             const token: string = jwt.sign({ _id: user._id }, `${process.env.TOKEN_KEY_JWT}`, {
-                expiresIn: 604800
+                expiresIn: 1815000000
             })
             res.cookie('authtoken', token, {
                 maxAge: 1815000000, //21 days
