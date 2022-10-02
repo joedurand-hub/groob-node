@@ -25,8 +25,8 @@ const server = http.createServer(app)
 
 let io = new SocketServer(server, {
     cors: {
-        origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 
-        'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
+        origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store',
+            'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
         optionsSuccessStatus: 200,
         // credentials: true,
         // methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
@@ -44,7 +44,7 @@ let io = new SocketServer(server, {
     }
 })
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => { };
 
 app.use(errorHandler);
 // Settings
@@ -56,12 +56,14 @@ var corsOptions = {
     origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 'http://localhost:3000'],
     credentials: true,
     optionsSuccessStatus: 200,
-    methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS'],
     allowedHeaders: [
         'Origin',
         'X-Requested-With',
         'Content-Type',
         'Accept',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Headers',
         'X-Access-Token',
         'authtoken'
     ],
@@ -96,20 +98,20 @@ io.on("connection", (socket) => { // solo para mostrar usuarios online
                     userId: newUserId,
                     socketId: socket.id
                 }
-                )
-            }
-            io.emit("getUsers", activeUsers) // send the users active
-        })
+            )
+        }
+        io.emit("getUsers", activeUsers) // send the users active
+    })
 
     socket.on("newMessage", (data) => {
-        if(data) {
-            console.log("1- data:",data)
+        if (data) {
+            console.log("1- data:", data)
             const user = activeUsers.find((user) => user.userId === data.reciverId)
-            if(user) {
+            if (user) {
                 console.log("2- user: ", user)
-            // io.to(user.socketId).emit("reciveMessage", data.newSocketMessage);
-            io.emit("receiveMessage", data.newSocketMessage);
-        }
+                // io.to(user.socketId).emit("reciveMessage", data.newSocketMessage);
+                io.emit("receiveMessage", data.newSocketMessage);
+            }
         }
     })
 
