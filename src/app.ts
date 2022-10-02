@@ -54,7 +54,7 @@ app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
     origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store', 
-    'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
+    'www.groob.store', 'www.groob.online', 'www.groob.com.ar', 'groob.store', 'groob.online', 'groob.com.ar', 'http://localhost:3000'],
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
