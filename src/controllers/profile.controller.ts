@@ -92,12 +92,14 @@ export const updateProfile = async (
     req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>,
     res: Response) => {
     try {
-        const { userName, description, birthday, firstName, lastName, online, premium, verified, explicitContent } = req.body;
+        const { userName, description, birthday, firstName, lastName, 
+            online, premium, verified, explicitContent } = req.body;
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
         const userUpdated = await User.findOneAndUpdate(
             { _id: user._id },
-            { userName, description, birthday, firstName, lastName, online, premium, verified, explicitContent })
+            { userName, description, birthday, firstName, lastName, 
+                online, premium, verified, explicitContent })
         res.status(200).json({ message: "User updated!", userUpdated });
         return closeConnectionInMongoose
     } catch (error) {
@@ -127,7 +129,7 @@ export const pictureProfile = async (
                 }
             }
         }
-        if(user !== undefined) {
+        if (user !== undefined) {
             user.profilePicture = obj
             const userUpdated = await user.save()
             const pictureUpdated = userUpdated.profilePicture

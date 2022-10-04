@@ -95,7 +95,8 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const { userName, description, birthday, firstName, lastName, online, premium, verified, explicitContent } = req.body;
         const { id } = req.params;
         const user = yield User_1.default.findById(id, { password: 0 });
-        const userUpdated = yield User_1.default.findOneAndUpdate({ _id: user._id }, { userName, description, birthday, firstName, lastName, online, premium, verified, explicitContent });
+        const userUpdated = yield User_1.default.findOneAndUpdate({ _id: user._id }, { userName, description, birthday, firstName, lastName,
+            online, premium, verified, explicitContent });
         res.status(200).json({ message: "User updated!", userUpdated });
         return constants_1.closeConnectionInMongoose;
     }
