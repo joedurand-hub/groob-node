@@ -18,24 +18,17 @@ const User_1 = __importDefault(require("../../models/User"));
 const Fiat_1 = __importDefault(require("../../models/Fiat"));
 const createFiatWallet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { entity, CBU, CVU, alias } = req.body;
         const user = yield User_1.default.findById(req.userId);
-        const wallet = yield Fiat_1.default.findOne({
-            members: { $all: [req.userId, req.body.recivedId] }
-        });
-        if (wallet !== undefined && wallet !== null) {
-            res.status(200).json({ message: "la Wallet ya existe boludín:", wallet });
-            return constants_1.closeConnectionInMongoose;
+        const newFiat = new Fiat_1.default({ entity, CBU, CVU, alias });
+        const result = yield newFiat.save();
+        const FiatId = result === null || result === void 0 ? void 0 : result._id;
+        if (user != undefined) {
+            user.fiatWallets = user.fiatWallets.concat(FiatId);
         }
-        else {
-            const newFiat = new Fiat_1.default({ members: [req.body.senderId, req.body.recivedId] });
-            const result = yield newFiat.save();
-            const FiatId = result === null || result === void 0 ? void 0 : result._id;
-            if (user != undefined)
-                user.Fiats = user.Fiats.concat(FiatId);
-            yield user.save();
-            res.status(200).json(result);
-            return constants_1.closeConnectionInMongoose;
-        }
+        yield user.save();
+        res.status(200).json(result);
+        return constants_1.closeConnectionInMongoose;
     }
     catch (error) {
         console.error(error);
@@ -44,25 +37,31 @@ const createFiatWallet = (req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.createFiatWallet = createFiatWallet;
 const getFiatWallet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
         const profileData = yield User_1.default.findById(req.userId, { password: 0 });
-        const myId = (_a = req.userId) === null || _a === void 0 ? void 0 : _a.toString();
-        if (profileData !== undefined) {
-            profileData.visits = profileData.visits.concat(myId);
-        }
-        yield profileData.save();
-        res.status(200).json({ profileData, myId });
+        const allWalletsFiat = profileData === null || profileData === void 0 ? void 0 : profileData.fiatWallets;
+        const wallets = yield Fiat_1.default.find({
+            _id: {
+                $in: allWalletsFiat
+            }
+        });
+        res.status(200).json(wallets);
         return constants_1.closeConnectionInMongoose;
     }
     catch (error) {
-        console.log("Cannot get profile", error);
+        console.log("error:", error);
         return res.status(404).json(error);
     }
 });
 exports.getFiatWallet = getFiatWallet;
 const updateFiatWallet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { entity, CBU, CVU, alias } = req.body;
+        const { id } = req.params;
+        const wallet = yield Fiat_1.default.findById(id, { password: 0 });
+        yield Fiat_1.default.findByIdAndUpdate({ _id: wallet._id }, { entity, CBU, CVU, alias });
+        res.status(200).json({ message: "Wallet updated!" });
+        return constants_1.closeConnectionInMongoose;
     }
     catch (error) {
         console.log("Error:", error);

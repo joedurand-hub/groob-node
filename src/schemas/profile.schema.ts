@@ -13,6 +13,7 @@ export const UpdateProfileSchema = z.object({
         followers: z.string().optional(),
         gender: z.string().optional(),
         online: z.boolean().optional(),
+        verified: z.boolean().optional(),
         premium: z.boolean().optional(),
         explicitContent: z.boolean().optional(),        
     }),

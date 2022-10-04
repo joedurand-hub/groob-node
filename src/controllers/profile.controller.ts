@@ -92,12 +92,12 @@ export const updateProfile = async (
     req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>,
     res: Response) => {
     try {
-        const { userName, description, age, firstName, lastName, explicitContent } = req.body;
+        const { userName, description, birthday, firstName, lastName, online, premium, verified, explicitContent } = req.body;
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
         const userUpdated = await User.findOneAndUpdate(
             { _id: user._id },
-            { userName, description, age, firstName, lastName, explicitContent })
+            { userName, description, birthday, firstName, lastName, online, premium, verified, explicitContent })
         res.status(200).json({ message: "User updated!", userUpdated });
         return closeConnectionInMongoose
     } catch (error) {

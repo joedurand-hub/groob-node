@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TokenValidator = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const TokenValidator = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.header('authToken');
+    const token = req.header('authtoken');
     if (!token)
         return res.status(401).json({
             error: "acceso denegado",

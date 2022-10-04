@@ -9,7 +9,7 @@ exports.SignupSchema = zod_1.z.object({
         email: zod_1.z.string().nonempty("Email is required")
             .email({ message: "Write a correct email" }),
         password: zod_1.z.string().nonempty("Password is required")
-            .regex(/^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9 \S]{6,32}$/),
+            .regex(/^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9 \S]{6,16}$/),
     })
 });
 exports.LoginSchema = zod_1.z.object({

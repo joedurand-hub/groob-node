@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const fiatSchema = new mongoose_1.Schema({
-    entidad: {
-        type: String, required: true, trim: true
+    entity: {
+        type: String, required: true, trim: true, default: "Banco - Entidad"
     },
     CBU: {
-        type: Number, required: false, trim: true, default: 0,
+        type: String, required: false, trim: true, default: "0000000000000000000000",
     },
     CVU: {
-        type: Number, required: false, trim: true, default: 0,
+        type: String, required: false, trim: true, default: "0000000000000000000000",
     },
     alias: {
-        type: String, required: true, trim: true, default: 0,
+        type: String, required: true, trim: true, default: "gato.perro.loro",
     },
     createdAt: {
         type: Date,

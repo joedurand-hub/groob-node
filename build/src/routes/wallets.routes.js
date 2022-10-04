@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const fiatWallet_controller_1 = require("../controllers/bussines/fiatWallet.controller");
+const tokenValidator_1 = require("../libs/tokenValidator");
+const router = (0, express_1.Router)();
+router.post('/wallet-fiat', tokenValidator_1.TokenValidator, fiatWallet_controller_1.createFiatWallet);
+router.get('/wallet-fiat', tokenValidator_1.TokenValidator, fiatWallet_controller_1.getFiatWallet);
+router.put('/wallet-fiat/:id', tokenValidator_1.TokenValidator, fiatWallet_controller_1.updateFiatWallet);
+exports.default = router;

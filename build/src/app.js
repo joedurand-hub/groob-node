@@ -16,6 +16,7 @@ const search_routes_1 = __importDefault(require("./routes/search.routes"));
 const follow_routes_1 = __importDefault(require("./routes/follow.routes"));
 const chat_routes_1 = __importDefault(require("./routes/chat.routes"));
 const messages_routes_1 = __importDefault(require("./routes/messages.routes"));
+const wallets_routes_1 = __importDefault(require("./routes/wallets.routes"));
 const socket_io_1 = require("socket.io");
 // Inicialization
 const app = (0, express_1.default)();
@@ -23,21 +24,22 @@ const server = http_1.default.createServer(app);
 // export instance for new sockets in endpoints
 let io = new socket_io_1.Server(server, {
     cors: {
-        origin: ['https://groob.vercel.app', 'http://groob.com.ar',
-            'http://www.groob.com.ar', 'https://groob.com.ar', 'https://www.groob.com.ar',
-            'http://localhost:3000'],
+        origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store',
+            'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
         optionsSuccessStatus: 200,
-        credentials: true,
-        methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH', 'OPTIONS'],
-        allowedHeaders: [
-            'Origin',
-            'X-Requested-With',
-            'Content-Type',
-            'Access-Control-Allow-Origin',
-            'Accept',
-            'X-Access-Token',
-            'AuthToken'
-        ],
+        // credentials: true,
+        // methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
+        // allowedHeaders: [
+        //     'Origin',
+        //     'X-Requested-With',
+        //     'Content-Type',
+        //     'Access-Control-Allow-Origin',
+        //     'Access-Control-Allow-Headers',
+        //     'Access-Control-Allow-Credentials',
+        //     'Accept',
+        //     'X-Access-Token',
+        //     'authtoken'
+        //   ],
     }
 });
 const errorHandler = (err, req, res, next) => { };
@@ -45,24 +47,26 @@ app.use(errorHandler);
 // Settings
 app.set('port', process.env.PORT || 8080);
 // Middlewares
+app.use((0, cookie_parser_1.default)());
 app.use((0, morgan_1.default)('dev'));
 var corsOptions = {
-    origin: 'https://www.groob.com.ar',
+    origin: ['https://www.groob.com.ar', 'https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://www.groob.online', 'https://groob.store', 'https://www.groob.store', 'http://localhost:3000'],
     credentials: true,
-    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH', 'OPTIONS'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS'],
     allowedHeaders: [
         'Origin',
         'X-Requested-With',
         'Content-Type',
         'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Headers',
+        'Access-Control-Allow-Credentials',
         'Accept',
         'X-Access-Token',
-        'AuthToken'
+        'authtoken'
     ],
 };
 app.use((0, cors_1.default)(corsOptions));
-app.use((0, cookie_parser_1.default)());
-app.enable('trust proxy');
+app.set("trust proxy", 1);
 app.use(express_1.default.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express_1.default.json({ limit: "50mb" }));
 // Routes
@@ -73,6 +77,7 @@ app.use(search_routes_1.default);
 app.use(follow_routes_1.default);
 app.use(chat_routes_1.default);
 app.use(messages_routes_1.default);
+app.use(wallets_routes_1.default);
 // Static files
 app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));

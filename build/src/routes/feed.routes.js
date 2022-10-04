@@ -21,6 +21,6 @@ router.post('/dislike/:id', tokenValidator_1.TokenValidator, publications_contro
 router.post('/post/:id', tokenValidator_1.TokenValidator, publications_controller_1.commentPost);
 router.get('/posts', tokenValidator_1.TokenValidator, getAllPostsByFollowings_controller_1.getAllPostsByFollowings);
 router.get('/posts/:id', tokenValidator_1.TokenValidator, profile_controller_1.getAllPostsByUser);
-router.get('/post/:id', tokenValidator_1.TokenValidator, (0, schemasValidator_1.schemaValidation)(publications_schema_1.GetOrDeletePublicationByIdSchema), publications_controller_1.getPostById);
+router.get('/post/:id', (0, schemasValidator_1.schemaValidation)(publications_schema_1.GetOrDeletePublicationByIdSchema), publications_controller_1.getPostById);
 router.delete('/post/:id', tokenValidator_1.TokenValidator, (0, schemasValidator_1.schemaValidation)(publications_schema_1.GetOrDeletePublicationByIdSchema), publications_controller_1.deletePost);
 exports.default = router;

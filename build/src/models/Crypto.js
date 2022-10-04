@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const fiatSchema = new mongoose_1.Schema({
     Coin: {
-        type: String, required: false, trim: true
+        type: String, required: false, trim: true, default: "USDT",
     },
     Red: {
-        type: String, required: false, trim: true
+        type: String, required: false, trim: true, default: "Binance Smart Chain",
     },
     Address: {
-        type: String, required: true, trim: true, default: 0,
+        type: String, required: true, trim: true, default: "00xRTX3090dBZ07snk5CpUxRGBx00",
     },
     createdAt: {
         type: Date,
