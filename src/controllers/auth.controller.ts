@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
-import {serialize} from "cookie"
 import User from "../models/User";
 import jwt from "jsonwebtoken"
-import { LoginBodyType, SignupBodyType } from "../schemas/auth..schema";
+import { LoginBodyType, SignupBodyType } from "../schemas/auth.schema";
 
 
 export const signup = async (req: Request<unknown, unknown, SignupBodyType>, res: Response) => {

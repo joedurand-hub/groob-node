@@ -13,6 +13,7 @@ import followRoute from './routes/follow.routes'
 import chatRoute from './routes/chat.routes'
 import messagesRoute from './routes/messages.routes'
 import walletsRoute from './routes/wallets.routes'
+import checkoutRoute from './routes/checkout.routes'
 import { Server as SocketServer } from "socket.io"
 import type { ErrorRequestHandler } from "express";
 
@@ -44,9 +45,9 @@ let io = new SocketServer(server, {
     }
 })
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => { };
+// const errorHandler: ErrorRequestHandler = (_err, _req, _res, _next: NextFunction) => { };
 
-app.use(errorHandler);
+// app.use(errorHandler);
 // Settings
 app.set('port', process.env.PORT || 8080)
 // Middlewares
@@ -70,8 +71,8 @@ var corsOptions = {
 }
 app.use(cors(corsOptions));
 app.set("trust proxy", 1)
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "85mb" }));
+app.use(express.json({ limit: "85mb" }));
 
 // Routes
 app.use(authRoute)
@@ -82,6 +83,7 @@ app.use(followRoute)
 app.use(chatRoute)
 app.use(messagesRoute)
 app.use(walletsRoute)
+app.use(checkoutRoute)
 
 // Static files
 app.use('/uploads', express.static(path.resolve('uploads')));
