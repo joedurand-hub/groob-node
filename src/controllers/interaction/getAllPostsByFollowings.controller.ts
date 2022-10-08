@@ -10,7 +10,6 @@ export const getAllPostsByFollowings = async (req: Request, res: Response) => {
 
         // traigo mi usuario y busco los id de mis publicaciones
         let myPosts = myUser.publications.map((id) => id)
-
         // busco mis publicaciones en el modelo
         const postsByMyUser = await Publication.find({
             _id: {
