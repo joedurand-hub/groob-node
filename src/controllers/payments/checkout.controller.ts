@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import mercadopago from 'mercadopago'
 
-
 mercadopago.configure({
-  access_token: 'APP_USR-6317427424180639-042414-47e969706991d3a442922b0702a0da44-469485398'
+  access_token: process.env.ACCESS_TOKEN_PRUE_MP
 });
 
 export const mPayment = async (req: Request, res: Response) => {
@@ -24,29 +23,29 @@ export const mPayment = async (req: Request, res: Response) => {
           currency_id: "ARS",
         }
       ],
-      payer: {
-        "name": nombre,
-        "surname": apellido,
-        "email": email,
-        "phone": {
-          "area_code": area,
-          "number": tel
-        },
-        "address": {
-          "zip_code": postal,
-          "street_name": direccion,
-          "street_number": numeroDireccion
-        },
+      // payer: {
+      //   "name": nombre,
+      //   "surname": apellido,
+      //   "email": email,
+      //   "phone": {
+      //     "area_code": area,
+      //     "number": tel
+      //   },
+      //   "address": {
+      //     "zip_code": postal,
+      //     "street_name": direccion,
+      //     "street_number": numeroDireccion
+      //   },
 
-      },
+      // },
       
       back_urls: {
-        "success": "htpp://localhost:5173/success",
-        "pending": "htpp://localhost:5173/pending",
-        "failure": "htpp://localhost:5173/error",
+        "success": "notifications/success",
+        "pending": "notifications/pending",
+        "failure": "notifications/error",
       },
-      auto_return: "approved",
-      notification_url: "htpp://localhost:5173/success",
+      // auto_return: "approved",
+      // notification_url: "localhost:3000/success",
     };
 
     mercadopago.preferences.create(preference)

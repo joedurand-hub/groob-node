@@ -13,7 +13,7 @@ import followRoute from './routes/follow.routes'
 import chatRoute from './routes/chat.routes'
 import messagesRoute from './routes/messages.routes'
 import walletsRoute from './routes/wallets.routes'
-import checkoutRoute from './routes/checkout.routes'
+import paymentsRoute from './routes/payments.routes'
 import { Server as SocketServer } from "socket.io"
 import type { ErrorRequestHandler } from "express";
 
@@ -83,7 +83,7 @@ app.use(followRoute)
 app.use(chatRoute)
 app.use(messagesRoute)
 app.use(walletsRoute)
-app.use(checkoutRoute)
+app.use(paymentsRoute)
 
 // Static files
 app.use('/uploads', express.static(path.resolve('uploads')));

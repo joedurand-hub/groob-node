@@ -1,4 +1,4 @@
-import { closeConnectionInMongoose } from './../../libs/constants';
+import { closeConnectionInMongoose } from '../../libs/constants';
 import { Request, Response } from "express";
 import User from "../../models/User"
 import Fiat from "../../models/Fiat"
