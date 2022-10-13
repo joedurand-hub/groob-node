@@ -26,8 +26,7 @@ const server = http.createServer(app)
 
 let io = new SocketServer(server, {
     cors: {
-        origin: ['https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://groob.store',
-            'https://www.groob.store', 'https://www.groob.online', 'https://www.groob.com.ar', 'http://localhost:3000'],
+        origin: ['https://www.groob.com.ar', 'https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://www.groob.online', 'https://groob.store', 'https://www.groob.store', 'http://localhost:3000'],
         optionsSuccessStatus: 200,
         // credentials: true,
         // methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
@@ -55,19 +54,19 @@ app.use(cookieParser())
 app.use(morgan('dev'))
 var corsOptions = {
     origin: ['https://www.groob.com.ar', 'https://groob.com.ar', 'https://groob.vercel.app', 'https://groob.online', 'https://www.groob.online', 'https://groob.store', 'https://www.groob.store', 'http://localhost:3000'],
-   credentials: true,
-        methods: ['GET','POST','DELETE','PUT','PATCH', 'OPTIONS'],
-        allowedHeaders: [
-            'Origin',
-            'X-Requested-With',
-            'Content-Type',
-            'Access-Control-Allow-Origin',
-            'Access-Control-Allow-Headers',
-            'Access-Control-Allow-Credentials',
-            'Accept',
-            'X-Access-Token',
-            'authtoken'
-          ],
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS'],
+    allowedHeaders: [
+        'Origin',
+        'X-Requested-With',
+        'Content-Type',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Headers',
+        'Access-Control-Allow-Credentials',
+        'Accept',
+        'X-Access-Token',
+        'authtoken'
+    ],
 }
 app.use(cors(corsOptions));
 app.set("trust proxy", 1)

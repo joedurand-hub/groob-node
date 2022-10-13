@@ -6,7 +6,7 @@ export const webHook = async (req: Request, res: Response) => {
         console.log(req.body)
         res.status(200).json("Todo piola")
     } catch (error) {
-        
+        console.log(error)
     }
   
   }
