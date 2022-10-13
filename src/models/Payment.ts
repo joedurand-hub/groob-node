@@ -1,19 +1,11 @@
 import { Schema, model } from 'mongoose'
 
-const productSchema = new Schema({
-    content: {
-        type: String, required: false, trim: true
-    },
-    images: [{
-        public_id: String,
-        secure_url: String, 
-        required: false, 
-    }],
-    price: {
-        type: Number, required: false, trim: true, default: 0,
-    },
-    likes: {
-        type: Number, default: 0,
+const paymentSchema = new Schema({
+    paymentId: String, 
+    date_created: String,
+    user_id: String,
+    data: {
+        id: String,
     },
     explicitContent: { type: Boolean, default: false},
     comments: {
@@ -31,4 +23,4 @@ const productSchema = new Schema({
     profilePicture: {type: String}
 }, { timestamps: true, versionKey: false })
 
-export default model('Product', productSchema)
+export default model('Payment', paymentSchema)
