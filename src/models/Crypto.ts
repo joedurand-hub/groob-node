@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-const fiatSchema = new Schema({
+const cryptoSchema = new Schema({
     Coin: {
         type: String, required: false, trim: true, default: "USDT",
     },
@@ -20,4 +20,4 @@ const fiatSchema = new Schema({
     },
 }, { timestamps: true, versionKey: false })
 
-export default model('Fiat', fiatSchema)
+export default model('Crypto', cryptoSchema)
