@@ -40,12 +40,12 @@ export const mPayment = async (req: Request, res: Response) => {
       // },
       
       back_urls: {
-        "success": "notifications/success",
-        "pending": "notifications/pending",
-        "failure": "notifications/error",
+        "success": "https://groob-backend-production.up.railway.app/success",
+        "pending": "https://groob-backend-production.up.railway.app/pending",
+        "failure": "https://groob-backend-production.up.railway.app/error",
       },
-      // auto_return: "approved",
-      // notification_url: "localhost:3000/success",
+      auto_return: "approved",
+      notification_url: "https://groob-backend-production.up.railway.app/notifications",
     };
 
     mercadopago.preferences.create(preference)
