@@ -6,7 +6,7 @@ mercadopago.configure({
 });
 
 export const mPayment = async (req: Request, res: Response) => {
-  const { nombreDelProducto, price, quantity, descripcion, 
+  const { productId, productName, price, quantity, picURL, descripcion, 
     nombre, apellido, email, direccion, numeroDireccion, area, tel, postal, } = req.body
 
   const cantidad = parseInt(quantity)
@@ -16,11 +16,13 @@ export const mPayment = async (req: Request, res: Response) => {
     let preference = {
       items: [
         {
-          title: nombreDelProducto,
+          id: productId,
+          title: productName,
           unit_price: precio,
           quantity: cantidad,
           description: descripcion,
           currency_id: "ARS",
+          picture_url: picURL,
         }
       ],
       // payer: {
@@ -40,9 +42,9 @@ export const mPayment = async (req: Request, res: Response) => {
       // },
       
       back_urls: {
-        "success": "https://groob-backend-production.up.railway.app/success",
-        "pending": "https://groob-backend-production.up.railway.app/pending",
-        "failure": "https://groob-backend-production.up.railway.app/error",
+        "success": "https://groob.com.ar/notifications/success",
+        "pending": "https://groob.com.ar/notifications/pending",
+        "failure": "https://groob.com.ar/notifications/error",
       },
       auto_return: "approved",
       notification_url: "https://groob-backend-production.up.railway.app/notifications",

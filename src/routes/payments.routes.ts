@@ -6,7 +6,7 @@ import { webHook} from '../controllers/payments/webHooks.controller'
 
 const router = Router()
 
-router.post('/checkout',  mPayment)
+router.post('/prefer-verify-account',  mPayment)
 
 router.post('/notifications',  webHook)
 
