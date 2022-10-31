@@ -24,6 +24,7 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
             if (files) {
                 for (const file of files) {
                     const result = await uploadImage({ filePath: file.path })
+                    console.log(result)
                     data.push({ public_id: result.public_id, secure_url: result.secure_url })
                     await fs.unlink(file.path)
                 }
@@ -45,6 +46,7 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
 export const getPostById = async (req: Request<GetOrDeletePublicationByIdType, unknown, unknown>, res: Response) => {
     try {
         const { id } = req.params
+
         const post = await Publication.findById({ _id: id })
         res.status(200).json(post)
         return closeConnectionInMongoose
