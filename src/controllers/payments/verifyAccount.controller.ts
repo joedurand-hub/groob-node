@@ -8,6 +8,7 @@ mercadopago.configure({
 export const verifyAccountPay = async (req: Request, res: Response) => {
   const { idToVerify, title, price, quantity, picURL, descripcion, 
     nombre, apellido, email, direccion, numeroDireccion, area, tel, postal, } = req.body
+    
     console.log(idToVerify, title, price, quantity, picURL, descripcion, 
         nombre, apellido, email, direccion, numeroDireccion, area, tel, postal, )
   

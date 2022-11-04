@@ -87,12 +87,13 @@ export const login = async (req: Request<unknown, unknown, LoginBodyType>, res: 
 
 export const logout = async (req: Request, res: Response) => {
     try {
+        const { id } = req.body
         const user = await User.findById(req.userId)
         user.online = false
         await user.save()
         res.clearCookie('authtoken');
         res.send('Cookie deleted');
-    } catch (error) {
+    } catch (error) {   
         console.log(error)
         res.status(400).json(error)
     }
