@@ -28,6 +28,7 @@ const publicationSchema = new Schema({
         ref: "User",
     },
     userName: {type: String},
+    userVerified: {type: Boolean},
     profilePicture: {type: String}
 }, { timestamps: true, versionKey: false })
 

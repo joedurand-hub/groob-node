@@ -102,7 +102,7 @@ export const updateProfile = async (
                 userName, description, birthday, firstName, lastName,
                 online, premium, verified, explicitContent
             })
-        await Publication.updateMany({ user: req.userId }, { userName: userName})
+        await Publication.updateMany({ user: req.userId }, { userName: userName, userVerified: verified})
         res.status(200).json({ message: "User updated!", userUpdated });
         return closeConnectionInMongoose
     } catch (error) {

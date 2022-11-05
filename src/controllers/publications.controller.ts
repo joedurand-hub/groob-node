@@ -16,7 +16,7 @@ export const createPost = async (req: Request<unknown, unknown, CreatePublicatio
         if (!user) return res.status(404).json("No user found")
         const publication = new Publication({
             content, price: priceValue, explicitContent: myBoolean, user: user?._id, userName: user?.userName,
-            profilePicture: user?.profilePicture.secure_url
+            profilePicture: user?.profilePicture.secure_url, userVerified: user?.verified
         })
         if (req.files) {
             const files = req.files['images']
