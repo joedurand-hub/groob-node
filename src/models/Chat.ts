@@ -9,6 +9,7 @@ const chatSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    updated: {type: Date},
 }, { timestamps: true, versionKey: false })
 
 export default model('Chat', chatSchema)

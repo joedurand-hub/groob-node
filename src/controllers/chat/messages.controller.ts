@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Message from "../../models/Message";
 import Chat from "../../models/Chat"
 import { closeConnectionInMongoose } from "../../libs/constants";
+import User from "../../models/User";
 
 
 
@@ -14,6 +15,11 @@ export const addMessage = async (req: Request, res: Response) => {
         if (chat !== undefined) {
             chat.messages = chat.messages.concat(text)
         }
+        const user = await User.findById(req.userId)
+        if(user != undefined) {
+            user.updatedAt = new Date()
+        }
+        await user.save()
         await chat.save()
         closeConnectionInMongoose
         res.status(200).json(result)

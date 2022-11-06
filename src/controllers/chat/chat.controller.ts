@@ -38,11 +38,11 @@ export const userChats = async (req: Request, res: Response) => {
             members: { $in: [req.userId] }
         })
 
-
         const userName = user?.userName
         const online = user?.online
         const profilePicture = user?.profilePicture?.secure_url
         const myId = user._id.toString()
+        const verified = user?.verified
 
         const usersInMyChat = chats.map(obj => obj.members).flat()
         const usersId = usersInMyChat.filter(member => member !== myId)
@@ -52,26 +52,31 @@ export const userChats = async (req: Request, res: Response) => {
                 $in: usersId
             }
         })
-
-        const chatIdAndUserId = chats.map(user => { // para saber con quien es el chat
+        
+        console.log(chats)
+        
+        const chatIdAndUserId = chats.map(chat => { // para saber con quien es el chat
             return {
-                id: user._id.toString(),
-                member: user.members,
+                id: chat._id.toString(),
+                member: chat.members,
+                updated: chat.updated,
             }
         })
-
+        
         const usersDataInTheChat = allMyChats.map(user => { // para renderizar los datos
             return {
                 id: user._id.toString(),
                 userName: user.userName,
                 profilePicture: user.profilePicture.secure_url,
                 online: user.online,
-                updatedAt: user.updatedAt,
+                verified: user.verified,
+                updated: user.updatedAt
             }
         })
+        console.log(usersDataInTheChat)
 
 
-        res.status(200).json({ chatIdAndUserId, usersDataInTheChat, userName, profilePicture, online, myId })
+        res.status(200).json({ chatIdAndUserId, usersDataInTheChat, userName, profilePicture, verified, online, myId })
 
         return closeConnectionInMongoose
     } catch (error) {
