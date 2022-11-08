@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const UpdateProfileSchema = z.object({
     body: z.object({
-        userName: z.string().nonempty("UserName is required").min(4, "User too short").max(16, "The userName must not exceed 16 characters").optional(),
+        userName: z.string().nonempty("UserName is required").min(3, "User too short").max(16, "The userName must not exceed 16 characters").optional(),
         email: z.string().nonempty("Password is required").email({ message: "Write a correct email" }).optional(),
         password: z.string().nonempty("Password is required").min(6, "Password too short").max(32, "The password must not exceed 32 characters").optional(),
         birthday: z.date().optional(),
@@ -11,6 +11,7 @@ export const UpdateProfileSchema = z.object({
         description: z.string().max(230, "The description must not exceed 230 characters").optional(),
         followings: z.string().optional(),
         followers: z.string().optional(),
+        phone: z.string().optional(),
         gender: z.string().optional(),
         online: z.boolean().optional(),
         verified: z.boolean().optional(),

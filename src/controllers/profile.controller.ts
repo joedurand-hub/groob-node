@@ -92,14 +92,15 @@ export const updateProfile = async (
     req: Request<ValidateProfileParamsType, unknown, UpdateProfileBodyType>,
     res: Response) => {
     try {
-        const { userName, description, birthday, firstName, lastName,
+        const { userName, description, phone, email, birthday, firstName, lastName,
             online, premium, verified, explicitContent } = req.body;
+            console.log(req.body)
         const { id } = req.params
         const user = await User.findById(id, { password: 0 })
         const userUpdated = await User.findOneAndUpdate(
             { _id: user._id },
             {
-                userName, description, birthday, firstName, lastName,
+                userName, description, phone, email, birthday, firstName, lastName,
                 online, premium, verified, explicitContent
             })
         await Publication.updateMany({ user: req.userId }, { userName: userName, userVerified: verified})

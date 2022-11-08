@@ -32,8 +32,10 @@ const userSchema = new Schema({
     public_id: String,
     secure_url: String
   },
+  phone: {type: String, default: ""},
   gender: { type: String, default: "Other" },
   verified: { type: Boolean, default: false },
+  verifiedInProcess: {type: Boolean, default: false},
   online: { type: Boolean, default: false },
   premium: { type: Boolean, default: false },
   visits: { type: [String] },
