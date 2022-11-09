@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import fs from "fs"
-import Sales from "../../models/Sales";
+import Payment from "../../models/Payment";
 // import mercadopago from 'mercadopago'
 
 export const webHook = async (req: Request, res: Response) => {
@@ -8,7 +8,7 @@ export const webHook = async (req: Request, res: Response) => {
 
         console.log(req.body)
         let data = req.body
-
+        const pay = new Payment(req.body)
         if (data['action'] == 'payment.created') {
             fs.writeFileSync(`${__dirname}/../webHookResponses.json`, JSON.stringify(data))
         }
