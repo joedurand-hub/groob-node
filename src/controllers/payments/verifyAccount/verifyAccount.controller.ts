@@ -51,7 +51,7 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
     mercadopago.preferences.create(preference)
       .then((response) => {
         console.log(response.body)
-        res.json(response.body)
+        res.json(response)
       })
 
 
