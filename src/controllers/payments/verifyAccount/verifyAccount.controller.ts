@@ -11,7 +11,7 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
     
   try {
 
-    let preference = {
+    let preference = {  
       items: [
         {
           id: idToVerify,
@@ -51,7 +51,7 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
     mercadopago.preferences.create(preference)
       .then((response) => {
         console.log(response.body)
-        res.json(response)
+        res.json(response.body.init_point)
       })
 
 
