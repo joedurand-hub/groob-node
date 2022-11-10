@@ -12,11 +12,9 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
   try {
 
     let preference = {
-      metadata: {
-        userId: idToVerify
-      },
       items: [
         {
+          id: idToVerify,
           title: title,
           unit_price: parseInt(price),
           quantity: parseInt(quantity),
