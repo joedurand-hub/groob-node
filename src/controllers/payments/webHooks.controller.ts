@@ -13,7 +13,7 @@ export const webHook = async (req: Request, res: Response) => {
             fs.writeFileSync(`${__dirname}/../webHookResponses.json`, JSON.stringify(data))
         }
 
-        res.status(200).send({ result: 'ok', message: 'Gracias' })
+        res.status(200).send('ok')
     } catch (error) {
         console.log(error)
     }
