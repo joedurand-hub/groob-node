@@ -5,7 +5,7 @@ mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN_PRUE_MP
 });
 
-export const mPayment = async (req: Request, res: Response) => {
+export const productPayment = async (req: Request, res: Response) => {
   const { productId, productName, price, quantity, picURL, descripcion, 
     nombre, apellido, email, direccion, numeroDireccion, area, tel, postal, } = req.body
 

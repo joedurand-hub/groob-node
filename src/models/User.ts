@@ -34,8 +34,9 @@ const userSchema = new Schema({
   },
   phone: {type: String, default: ""},
   gender: { type: String, default: "Other" },
-  verified: { type: Boolean, default: false },
-  verifiedInProcess: {type: Boolean, default: false},
+  verificationPay: {type: Boolean, default: false}, // Si la verificación está paga
+  identityCheck: {type: Boolean, default: false}, // Si la identidad está comprobada 
+  verified: { type: Boolean, default: false }, // Asigno la verificación en true
   online: { type: Boolean, default: false },
   premium: { type: Boolean, default: false },
   visits: { type: [String] },

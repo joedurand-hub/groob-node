@@ -12,6 +12,9 @@ const publicationSchema = new Schema({
     price: {
         type: Number, required: false, trim: true, default: 0,
     },
+    paid: {
+        type: [String] //ID del usuario que lo compró
+    },
     likes: {
         type: Number, default: 0,
     },

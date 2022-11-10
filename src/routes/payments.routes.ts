@@ -1,15 +1,16 @@
 import { Router } from 'express'
-import { mPayment } from '../controllers/payments/checkout.controller'
-import { verifyAccountPay } from '../controllers/payments/verifyAccount.controller'
-import { webHook} from '../controllers/payments/webHooks.controller'
+import { productPayment } from '../controllers/payments/product/product.controller'
+import { verifyAccountPay } from '../controllers/payments/verifyAccount/verifyAccount.controller'
+import { webHook} from '../controllers/payments/verifyAccount/webHook.controller'
 
 import { TokenValidator } from '../libs/tokenValidator';
 
 const router = Router()
 
 router.post('/prefer-verify-account', TokenValidator, verifyAccountPay)
-router.post('/prefer-product', TokenValidator, mPayment)
+router.post('/prefer-product', TokenValidator, productPayment)
 
 router.post('/notifications',  webHook)
+// router.post('/notifications',  webHook)
 
 export default router;

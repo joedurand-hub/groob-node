@@ -9,21 +9,17 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
   const { idToVerify, title, price, quantity, picURL, descripcion, 
     nombre, apellido, email, direccion, numeroDireccion, area, tel, postal, } = req.body
     
-    console.log(idToVerify, title, price, quantity, picURL, descripcion, 
-        nombre, apellido, email, direccion, numeroDireccion, area, tel, postal, )
-  
-  const cantidad = parseInt(quantity)
-  const precio = parseInt(price)
-
   try {
 
     let preference = {
+      metadata: {
+        userId: idToVerify
+      },
       items: [
         {
-          id: idToVerify,
           title: title,
-          unit_price: precio,
-          quantity: cantidad,
+          unit_price: parseInt(price),
+          quantity: parseInt(quantity),
           description: descripcion,
           currency_id: "ARS",
           picture_url: picURL,
@@ -56,8 +52,8 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
 
     mercadopago.preferences.create(preference)
       .then((response) => {
-        console.log(response)
-        res.json(response)
+        console.log(response.body)
+        res.json(response.body)
       })
 
 
