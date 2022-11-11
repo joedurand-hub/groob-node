@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import fs from "fs"
 import axios from "axios"
-import Payment from "../../../models/Payment";
+import Payment from "../../models/Payment";
 // import mercadopago from 'mercadopago'
 
 
