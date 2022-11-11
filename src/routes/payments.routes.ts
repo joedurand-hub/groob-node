@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { productPayment } from '../controllers/payments/product/product.controller'
-import { verifyAccountPay } from '../controllers/payments/verifyAccount.controller'
+import { verifyAccountPay } from '../controllers/verifyAccount.controller'
 import { webHook} from '../controllers/payments/verifyAccount/webHook.controller'
 
 import { TokenValidator } from '../libs/tokenValidator';

@@ -18,7 +18,7 @@ export const verifyAccountPay = async (req: Request, res: Response) => {
     let preference = {
       items: [
         {
-          id: idToVerify,
+          // id: idToVerify,
           title: title,
           unit_price: precio,
           quantity: cantidad,
