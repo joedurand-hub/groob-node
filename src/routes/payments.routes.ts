@@ -7,8 +7,8 @@ import { TokenValidator } from '../libs/tokenValidator';
 
 const router = Router()
 
-router.post('/prefer-verify', TokenValidator, verifyAccountPay)
-router.post('/prefer-product', TokenValidator, productPayment)
+router.post('/verifyAccount', TokenValidator, verifyAccountPay)
+router.post('/productPreference', TokenValidator, productPayment)
 
 router.post('/notifications',  webHook)
 // router.post('/notifications',  webHook)
